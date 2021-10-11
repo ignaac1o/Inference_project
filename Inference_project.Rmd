@@ -1,0 +1,94 @@
+---
+title: "Inference_project"
+author: Ignacio Almodóar & Wuan
+output: pdf_document
+---
+
+
+\newpage
+
+# 1. Introduction 
+
+## 1.1 Description of the project and motivation. 
+
+## 1.2 Description of the data set
+
+## 1.3 Population of our sample size 
+
+## 1.4 Description of the variables
+
+
+\newpage
+
+# 2. Model Selection
+
+```{r,echo=FALSE}
+library(readr)
+data=read.csv2("EV_DATASET_woNA.csv",dec = ",")
+```
+
+
+## 2.1 Pobability distribuction of our continuous random variable "Price in Germany"
+
+In order to get a quick view of how our variable is distributed, we have to plot it. A good way to view it is by plotting a histogram of the variable.
+```{r,echo=FALSE}
+EURprice=data$PriceinGermany
+```
+```{r}
+hist(EURprice)
+```
+
+First of all, if we want to model our variable we have to make sure that our variable is normally distributed. By plotting directly our variable that contains the price in EUR for each car in Germany, we can see that it is asymmetric, which means that it violates the assumptions of linear regression.
+
+In order to transform our variable into a normally distributed one, we can apply logarithms to it. This way we make sure that our variable is normally distributed and we can model it with linear regression.
+
+```{r}
+pricelog=log(data$PriceinGermany)
+hist(pricelog)
+```
+
+## 2.2 Estimation of model parameters.
+
+Analyzing these histograms we can assume that our random variable follows a poison distribution with parameter ($\hat{\lambda}$). 
+
+As we want to estimate our model parameters (in this case $\hat{\lambda}$), we are going to use the method of moments in order estimate it.
+
+The method of moments consists in leveling population moments and sample moments in order to get an equation or system of equations from where to get our wanted parameters.
+
+Assuming that our variable "Price in Germany" is a random variable that follows a Poisson($\hat{\lambda}$) distribution with $\hat{\lambda} > 0$, then:
+
+$E(x)=\hat{\lambda}$
+
+As our sample is a random sample of this distribution, the first sample moment is:
+
+$\bar{X}=\frac{1}{n} \displaystyle\sum_{i=1}^n x_{i}$
+
+Then, by the moment of methods, $\hat{\lambda}=\frac{1}{n} \displaystyle\sum_{i=1}^n x_{i}$
+
+```{r}
+lambdahat=mean(pricelog)
+```
+```{r,echo=FALSE}
+lambdahat
+```
+
+$\hat{\lambda}=10.8649$ 
+
+\newpage
+
+# 3. One-sample Inference
+
+## 3.1 Estimators for our population mean
+
+## 3.2 Estimation of the errors of our estimators
+
+## 3.3 Confidence interval of 95% for our population mean
+
+## 3.4 Estimation of the proportion of units in the population that belongs to the category slected
+
+## 3.5 Variance of our estimator of proportion
+
+## 3.6 Population proportion with 95% of confidence interval
+
+
+\newpage
