@@ -1,6 +1,6 @@
 ---
 title: "Inference_project"
-author: Ignacio Almodóar & Wuan
+author: Ignacio Almodóar & Limingrui Wan
 output: pdf_document
 ---
 
@@ -93,6 +93,12 @@ This is a resume of all the variables that our data set contains. However we mig
 library(readr)
 data=read.csv2("EV_DATASET_woNA.csv",dec = ",")
 ```
+```{r}
+library(tidyverse)
+data=read.csv("EV_DATASET_woNA.csv",dec = ",")
+data$PriceinGermany[is.na(data$PriceinGermany)]=data$PriceinUK[is.na(data$PriceinGermany)]*1.15
+data=data[-c(29,120,129),]
+```
 
 
 ## 2.1 Pobability distribuction of our continuous random variable "Price in Germany"
@@ -168,15 +174,86 @@ lines(r, f, col = "red", lwd = 2)
 
 ## 3.1 Estimators for our population mean
 
-## 3.2 Estimation of the errors of our estimators
+### unbiasedness
+
+In this section we can use sample mean and sample median value to estimate our population mean.
+```{r}
+samplemean=mean(pricelog)
+sampleva=var(pricelog)
+paste("the sample mean is ",samplemean)
+paste("the sample median is ", median(pricelog))
+```
+we can quickly give the distribution of the sample mean:
+$$\hat\theta \sim N(\mu,\sigma^2/n)$$
+since we assumed a gamma distribution, we have $\mu=\frac{\alpha}{\beta}$ and $\sigma^2=\frac{\alpha}{\beta^2}$
+
+
+obviously the sample mean is an unbiased estimator, as for the sample median value we know that gamma distribution is not symmetric. To proof this we can check again our plot.
+```{r}
+hist(pricelog,prob=TRUE)
+```
+More specifically, we can get the pdf of the median value via the formula for order statistics, which is
+$$\rho_k(x) = \frac{n!}{(k-1)!(n-k)!}(F(x))^{k-1}(1-F(x))^{n-k}\rho(x) $$
+where n is the total number, k is the order number, $\rho(x)$ is the pdf of the general distribution, $F(x)$ is the cdf.
+
+To proof if this median value we can compute the expectation of the estimator, so we shall calculate such indefinite integral:
+$$\int x\rho_k(x) \space dx$$
+
+
+###
+
+
+## 3.2 Estimation of the errors of the two estimators
+Since sample mean is an unbiased estimator, so we can calculate the error by CV, which is 
+$$cv=\frac{sd(\hat \theta)}{exp(\hat \theta)} = \frac{\sqrt{\frac{\hat\alpha}{n\hat\beta^2}}}{\frac{\hat\alpha}{\hat\beta}} =\sqrt{\frac{1}{n\hat\alpha}}=0.017$$
+```{r include=FALSE}
+1/((hatlambda*177)^0.5)
+```
+as for the median value, we can compute the RRMSE $RRMSE=\sqrt{E(\hat\theta-\theta)^2}$
 
 ## 3.3 Confidence interval of 95% for our population mean
+we can use our sample to give the CI
+$$ CI_{1-\alpha}(\mu)=\overline x_n \pm t_{n-1,\alpha/2} \frac{S'}{\sqrt n}$$
+```{r}
+CI=c(samplemean+qt(0.025,177)*sqrt(sampleva),samplemean-qt(0.025,i)*sqrt(sampleva))
+CI
+```
 
-## 3.4 Estimation of the proportion of units in the population that belongs to the category slected
+
+## 3.4 Estimation of the proportion of units in the population that belongs to the category selected
+```{r}
+data$Drive=as.factor(data$Drive)
+table(data$Drive)
+plot(data$Drive)
+```
+the estimated proportion is:
+```{r}
+p1=64/177
+p2=68/177
+p3=45/177
+p1
+p2
+p3
+```
 
 ## 3.5 Variance of our estimator of proportion
-
+the variance of the estimator is:
+```{r}
+n=177
+v1=p1*(1-p1)/n
+v2=p2*(1-p2)/n
+v3=p3*(1-p3)/n
+v1
+v2
+v3
+```
 ## 3.6 Population proportion with 95% of confidence interval
+$$\hat p \pm Z_{\alpha/2} \sqrt{\frac{\hat p(1-\hat p)}{n}}$$
+```{r}
+c(p1+qnorm(0.025)*sqrt(v1),p1-qnorm(0.025)*sqrt(v1))
+c(p2+qnorm(0.025)*sqrt(v2),p2-qnorm(0.025)*sqrt(v2))
+c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
+```
 
 
 \newpage
