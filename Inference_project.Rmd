@@ -89,11 +89,7 @@ This is a resume of all the variables that our data set contains. However we mig
 
 # 2. Model Selection
 
-```{r,echo=FALSE}
-library(readr)
-data=read.csv2("EV_DATASET_woNA.csv",dec = ",")
-```
-```{r}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 data=read.csv("EV_DATASET_woNA.csv",dec = ",")
 data$PriceinGermany[is.na(data$PriceinGermany)]=data$PriceinUK[is.na(data$PriceinGermany)]*1.15
@@ -104,10 +100,11 @@ data=data[-c(29,120,129),]
 ## 2.1 Pobability distribuction of our continuous random variable "Price in Germany"
 
 In order to get a quick view of how our variable is distributed, we have to plot it. A good way to view it is by plotting a histogram of the variable.
-```{r,echo=FALSE}
+```{r echo=FALSE}
 EURprice=data$PriceinGermany
 ```
-```{r}
+
+```{r echo=FALSE}
 hist(EURprice)
 ```
 
@@ -115,7 +112,7 @@ First of all, if we want to model our variable we have to make sure that our var
 
 In order to transform our variable into a normally distributed one, we can apply logarithms to it. This way we make sure that our variable is normally distributed and we can model it with linear regression.
 
-```{r}
+```{r echo=FALSE}
 pricelog=log(data$PriceinGermany)
 hist(pricelog,prob=TRUE)
 ```
@@ -150,7 +147,7 @@ $\hat\alpha=\overline X\hat\lambda=\frac{\overline X^2}{\frac{1}{n}\sum_{i=0}^n 
 
 Using these results we can calculate our estimators using R. Running the code above we can say that our variable "Price in Germany" follows a gamma distribution $\Gamma(\hat\alpha,\hat\lambda)$ with parameters $\hat\alpha=569.5397$ and $\hat\lambda=52.419$
 
-```{r}
+```{r echo=FALSE}
 a=0
 for(i in 1:length(pricelog)){
   a=a+pricelog[i]^2
@@ -160,11 +157,11 @@ hatlambda=(mean(pricelog))/((a/length(pricelog))-mean(pricelog)^2)
 hatalpha=hatlambda*mean(pricelog)
 
 x=1:length(pricelog)
-hist(pricelog,prob=TRUE)
+help(hist)
+hist(pricelog,prob=TRUE,breaks = 20)
 r <- seq(min(pricelog), max(pricelog), length = 177)
 f <- dgamma(r, hatalpha, hatlambda)
 lines(r, f, col = "red", lwd = 2)
-
 ```
 
 
@@ -177,7 +174,7 @@ lines(r, f, col = "red", lwd = 2)
 ### unbiasedness
 
 In this section we can use sample mean and sample median value to estimate our population mean.
-```{r}
+```{r echo=FALSE}
 samplemean=mean(pricelog)
 sampleva=var(pricelog)
 paste("the sample mean is ",samplemean)
@@ -187,11 +184,12 @@ we can quickly give the distribution of the sample mean:
 $$\hat\theta \sim N(\mu,\sigma^2/n)$$
 since we assumed a gamma distribution, we have $\mu=\frac{\alpha}{\beta}$ and $\sigma^2=\frac{\alpha}{\beta^2}$
 
-
 obviously the sample mean is an unbiased estimator, as for the sample median value we know that gamma distribution is not symmetric. To proof this we can check again our plot.
-```{r}
+
+```{r echo=FALSE}
 hist(pricelog,prob=TRUE)
 ```
+
 More specifically, we can get the pdf of the median value via the formula for order statistics, which is
 $$\rho_k(x) = \frac{n!}{(k-1)!(n-k)!}(F(x))^{k-1}(1-F(x))^{n-k}\rho(x) $$
 where n is the total number, k is the order number, $\rho(x)$ is the pdf of the general distribution, $F(x)$ is the cdf.
@@ -200,45 +198,41 @@ To proof if this median value we can compute the expectation of the estimator, s
 $$\int x\rho_k(x) \space dx$$
 
 
-###
-
-
 ## 3.2 Estimation of the errors of the two estimators
 Since sample mean is an unbiased estimator, so we can calculate the error by CV, which is 
 $$cv=\frac{sd(\hat \theta)}{exp(\hat \theta)} = \frac{\sqrt{\frac{\hat\alpha}{n\hat\beta^2}}}{\frac{\hat\alpha}{\hat\beta}} =\sqrt{\frac{1}{n\hat\alpha}}=0.017$$
-```{r include=FALSE}
-1/((hatlambda*177)^0.5)
-```
+
 as for the median value, we can compute the RRMSE $RRMSE=\sqrt{E(\hat\theta-\theta)^2}$
 
 ## 3.3 Confidence interval of 95% for our population mean
-we can use our sample to give the CI
+we are not having the true distribution of the price in population, so we don't know the true variance, thus we don't know the variance of mean value. So we decide to use the method of the pivotal quantity for $\mu$
 $$ CI_{1-\alpha}(\mu)=\overline x_n \pm t_{n-1,\alpha/2} \frac{S'}{\sqrt n}$$
-```{r}
+```{r echo=FALSE}
 CI=c(samplemean+qt(0.025,177)*sqrt(sampleva),samplemean-qt(0.025,i)*sqrt(sampleva))
 CI
 ```
 
 
 ## 3.4 Estimation of the proportion of units in the population that belongs to the category selected
-```{r}
+We divide the sample into three groups according to the variable "drive", which implies how the specific car is driven. We consider a Binomial distribution$Bern(p)$, the estimator actually estimate the mean value of the probability in Binomial test, so the distribution of estimated proportion is$N(p,\frac{1(1-p)}{n})$
+```{r echo=FALSE}
 data$Drive=as.factor(data$Drive)
 table(data$Drive)
 plot(data$Drive)
 ```
 the estimated proportion is:
-```{r}
+```{r echo=FALSE}
 p1=64/177
 p2=68/177
 p3=45/177
-p1
-p2
-p3
+paste("the estimated proportion of All wheel Drive car is ",p1 )
+paste("the estimated proportion of Front Wheel Drive car is ",p2 )
+paste("the estimated proportion of Rear Wheel Drive  car is ",p3 )
 ```
 
 ## 3.5 Variance of our estimator of proportion
 the variance of the estimator is:
-```{r}
+```{r echo=FALSE}
 n=177
 v1=p1*(1-p1)/n
 v2=p2*(1-p2)/n
@@ -248,12 +242,12 @@ v2
 v3
 ```
 ## 3.6 Population proportion with 95% of confidence interval
+we can give the proportion by such formula, so we can get such results
 $$\hat p \pm Z_{\alpha/2} \sqrt{\frac{\hat p(1-\hat p)}{n}}$$
-```{r}
+```{r echo=FALSE}
 c(p1+qnorm(0.025)*sqrt(v1),p1-qnorm(0.025)*sqrt(v1))
 c(p2+qnorm(0.025)*sqrt(v2),p2-qnorm(0.025)*sqrt(v2))
 c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
 ```
-
 
 \newpage
