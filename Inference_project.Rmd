@@ -97,29 +97,30 @@ data=data[-c(29,120,129),]
 ```
 
 
-## 2.1 Pobability distribuction of our continuous random variable "Price in Germany"
+## 2.1 Probability distribuction of our continuous random variable "Price in Germany"
 
 In order to get a quick view of how our variable is distributed, we have to plot it. A good way to view it is by plotting a histogram of the variable.
+
 ```{r echo=FALSE}
-EURprice=data$PriceinGermany
+EURprice=data$PriceinGermany*1000
 ```
 
 ```{r echo=FALSE}
 hist(EURprice)
 ```
 
-First of all, if we want to model our variable we have to make sure that our variable is normally distributed. By plotting directly our variable that contains the price in EUR for each car in Germany, we can see that it is asymmetric, which means that it violates the assumptions of linear regression.
-
-In order to transform our variable into a normally distributed one, we can apply logarithms to it. This way we make sure that our variable is normally distributed and we can model it with linear regression.
+By analyzing this plot we can assume that it follows a gamma distribution $\Gamma(\alpha,\lambda)$. We are also going to transform our data applying logarithms to it and see if the distribution changes or not.
 
 ```{r echo=FALSE}
-pricelog=log(data$PriceinGermany)
+pricelog=log(EURprice)
 hist(pricelog,prob=TRUE)
 ```
 
+Even though when applying logarithm we get a much symmetric distribution,  it still looks more like a gamma distribution than a normal one so we can assume that our variable "PriceforGermany" follows a Poisson distribution.
+
 ## 2.2 Estimation of model parameters.
 
-Analyzing these histograms we can assume that our random variable follows a gamma distribution $\Gamma(\alpha,\lambda)$ with parameters:
+As we have concluded in the last point, we can assume that our random variable follows a gamma distribution $\Gamma(\alpha,\lambda)$ with parameters:
 
 - Shape $k$, $\alpha=k$
 - Scale $\theta$, $\lambda=\frac{1}{\theta}$ 
@@ -135,33 +136,53 @@ For a gamma distribution, we get the following equations:
 
 As we know that $E[x]=\frac{\alpha}{\lambda}$ for a Gamma distribution, from the first function we get that:
 
-$\alpha=\overline X\lambda$
+$$\alpha=\overline X\lambda$$
 
 Replacing $\alpha$ on the second equation and simplifying it, we obtain:
 
-$\hat\lambda= \frac{\overline X}{\frac{1}{n}\sum_{i=0}^n x_{i}^2 - \overline{X}^2}$
+$$\hat\lambda= \frac{\overline X}{\frac{1}{n}\sum_{i=0}^n x_{i}^2 - \overline{X}^2}$$
 
 Whereas, using $\alpha=\overline X\lambda$, we get:
 
-$\hat\alpha=\overline X\hat\lambda=\frac{\overline X^2}{\frac{1}{n}\sum_{i=0}^n x_{i}^2 - \overline{X}^2}$
+$$\hat\alpha=\overline X\hat\lambda=\frac{\overline X^2}{\frac{1}{n}\sum_{i=0}^n x_{i}^2 - \overline{X}^2}$$
 
-Using these results we can calculate our estimators using R. Running the code above we can say that our variable "Price in Germany" follows a gamma distribution $\Gamma(\hat\alpha,\hat\lambda)$ with parameters $\hat\alpha=569.5397$ and $\hat\lambda=52.419$
+Using these results we can calculate our estimators using R. We are going to compute the estimators of our both of our variables, with and without logarithm. This way we can then see which one of them has less error, therefore we will know which one is a better estimator. Running the code above we can say that our variable "Price in Germany" follows a $\Gamma(\hat\alpha,\hat\lambda)$ with parameters $\hat\alpha=3.3$ and $\hat\lambda=5.649*10^-5$ whereas if we take logarithm its parameters are $\hat\alpha=569.5397$ and $\hat\lambda=52.419$
 
-```{r echo=FALSE}
+```{r}
 a=0
-for(i in 1:length(pricelog)){
-  a=a+pricelog[i]^2
+for(i in 1:length(EURprice)){
+  a=a+EURprice[i]^2
 }
 
-hatlambda=(mean(pricelog))/((a/length(pricelog))-mean(pricelog)^2)
-hatalpha=hatlambda*mean(pricelog)
+hatlambda=(mean(EURprice))/((a/length(EURprice))-mean(EURprice)^2)
+hatalpha=hatlambda*mean(EURprice)
+
+hist(EURprice,prob=TRUE,breaks = 20)
+r <- seq(min(EURprice), max(EURprice), length = 177)
+f <- dgamma(r, hatalpha, hatlambda)
+lines(r, f, col = "red", lwd = 2)
+
+```
+
+```{r echo=FALSE}
+b=0
+for(i in 1:length(pricelog)){
+  b=b+pricelog[i]^2
+}
+
+
+hatlambdalog=(mean(pricelog))/((b/length(pricelog))-mean(pricelog)^2)
+hatalphalog=hatlambdalog*mean(pricelog)
 
 x=1:length(pricelog)
 hist(pricelog,prob=TRUE,breaks = 20)
-r <- seq(min(pricelog), max(pricelog), length = 177)
-f <- dgamma(r, hatalpha, hatlambda)
-lines(r, f, col = "red", lwd = 2)
+#r <- seq(min(EURprice), max(EURprice), length = 177)
+rlog =  seq(min(pricelog), max(pricelog), length = 177)
+#f <- dgamma(r, hatalpha, hatlambda)
+l <- dgamma(rlog, hatalphalog, hatlambdalog)
+lines(rlog, l, col = "red", lwd = 2)
 ```
+
 
 
 \newpage
