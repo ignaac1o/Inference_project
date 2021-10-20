@@ -94,6 +94,7 @@ library(tidyverse)
 data=read.csv("EV_DATASET_woNA.csv",dec = ",")
 data$PriceinGermany[is.na(data$PriceinGermany)]=data$PriceinUK[is.na(data$PriceinGermany)]*1.15
 data=data[-c(29,120,129),]
+data$PriceinGermany=data$PriceinGermany*1000
 ```
 
 
@@ -102,7 +103,7 @@ data=data[-c(29,120,129),]
 In order to get a quick view of how our variable is distributed, we have to plot it. A good way to view it is by plotting a histogram of the variable.
 
 ```{r echo=FALSE}
-EURprice=data$PriceinGermany*1000
+EURprice=data$PriceinGermany
 ```
 
 ```{r echo=FALSE}
@@ -290,10 +291,62 @@ c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
 
 \newpage
 
-```{r}
-table(data$NumberofSeats)
-as.factor(data$NumberofSeats)
+
+# 4 Inference with more than one sample
+
+```{r echo=FALSE}
 data$size=1
 data$size[data$NumberofSeats!=7]=0
+table(data$NumberofSeats)
+data_smallcar=data[data$size==0,]
+data_bigcar=data[data$size==1,]
 ```
+
+## 4.1 population mean of each group
+
+In this section, we choose to divide the sample and population into two subgroups according to the variable *numberofseats*. This variable has four possible values :2,4,5,7. But we can notice that some subgroups have only a few items, so we decide to create a new factor variable *size*. We defined the cars with 5 or less seats as *small* cars, marked as *0*, and the cars with 7 seats as *big* cars, marked as *1*.
+```{r}
+barplot(table(data$size))
+```
+as we can see that we have 145 small cars and 32 big cars in the sample, and we assume for each group the distribution is still gamma. 
+In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim Ga(\alpha_1,\beta_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 \sim Ga(\alpha_2,\beta_2)$, where $n_1=145, n_2=32$,$\alpha_1,\alpha_2,\beta_1,\beta_2$ unknown. $X_1,X_2$ independent. 
+
+We can estimate the population mean of *price* in our data, as we did in section 3.1, using sample mean as estimator.
+
+$$\hat\mu_1=\overline x_1, \space\hat\mu_2=\overline x_2 $$
+
+```{r echo=FALSE}
+n1=length(data_smallcar$PriceinGermany)
+n2=length(data_bigcar$PriceinGermany)
+samplemean_s=mean(data_smallcar$PriceinGermany)
+samplemean_b=mean(data_bigcar$PriceinGermany)
+paste("mean price of the small cars is", samplemean_s)
+paste("mean price of the big cars is", samplemean_b)
+```
+in order to get the coefficient of variation, we need to know the variance of the estimator, we can use $S'^2$ to estimate the population variance.
+```{r echo=FALSE}
+var_1=0
+for (i in 1:n1){
+  var_1=var_1+((samplemean_s-data_smallcar$PriceinGermany[i])^2)
+}
+var_1=var_1/(n1-1)
+
+var_2=0
+for (i in 1:n2){
+  var_2=var_2+((samplemean_b-data_bigcar$PriceinGermany[i])^2)
+}
+var_2=var_2/(n1-1)
+paste("estimated variance of price in small cars is ", var_1)
+paste("estimated variance of price in big cars is", var_2)
+```
+so far we give the distribution of our estimator and compute their CVs:
+$$\hat\mu_1 \sim N(\overline x_1,v(x_1)/n_1),\hat\mu_2 \sim N(\overline x_2,v(x_2)/n_2)$$
+```{r echo=FALSE}
+paste("cv of the small cars' prices is", ((var_1/n1)^0.5)/samplemean_s)
+paste("cv of the big cars' prices is", ((var_2/n2)^0.5)/samplemean_b)
+```
+
+
+
+
 
