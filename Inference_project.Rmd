@@ -256,7 +256,7 @@ paste("the estimated proportion of Rear Wheel Drive  car is ",p3 )
 ```
 
 ## 3.5 Variance of our estimator of proportion
-the variance of the estimator is:
+since we have obtained the distribution of $\overline x$,we can easily get the variance of the estimator:
 ```{r echo=FALSE}
 n=177
 v1=p1*(1-p1)/n
@@ -267,7 +267,20 @@ v2
 v3
 ```
 ## 3.6 Population proportion with 95% of confidence interval
-we can give the proportion by such formula, so we can get such results
+
+from our previous work, we notice that the sample proportion actually is $\overline x$, and its distribution is 
+$$\overline x \sim N(p,\frac{p(1-p)}{n})$$
+
+so we have such conclusions:
+$$\frac{\overline x-p}{\sqrt{\overline x(1-\overline x)}}\stackrel{d}\longrightarrow N(0,1)$$
+$$\sqrt{\frac{\overline x(1-\overline x)}{p(1-p)}}\stackrel{p}\longrightarrow 1$$
+so we can write a pivot 
+$$Z=\frac{\overline x-p}{\sqrt{\frac{\overline x(1-\overline x)}{n}}}\stackrel{d}\longrightarrow N(0,1)$$
+now we need to find such $c_1,c_2 \space s.t.$
+$$P(c_1<=p<=c2)=1-\alpha$$
+$$P(\frac{\overline x-c_1}{\sqrt{\frac{\overline x(1-\overline x)}{n}}}<=Z<=\frac{\overline x-c_2}{\sqrt{\frac{\overline x(1-\overline x)}{n}}})$$
+notice in this case $\hat p=\overline x$, we have such conclusions
+
 $$\hat p \pm Z_{\alpha/2} \sqrt{\frac{\hat p(1-\hat p)}{n}}$$
 ```{r echo=FALSE}
 c(p1+qnorm(0.025)*sqrt(v1),p1-qnorm(0.025)*sqrt(v1))
@@ -276,4 +289,11 @@ c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
 ```
 
 \newpage
+
+```{r}
+table(data$NumberofSeats)
+as.factor(data$NumberofSeats)
+data$size=1
+data$size[data$NumberofSeats!=7]=0
+```
 
