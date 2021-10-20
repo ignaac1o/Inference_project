@@ -1,7 +1,7 @@
 ---
 title: "Inference_project"
 author: Ignacio Almodóar & Limingrui Wan
-output: pdf_document
+output: html_document
 ---
 
 
@@ -153,15 +153,12 @@ a=0
 for(i in 1:length(EURprice)){
   a=a+EURprice[i]^2
 }
-
 hatlambda=(mean(EURprice))/((a/length(EURprice))-mean(EURprice)^2)
 hatalpha=hatlambda*mean(EURprice)
-
 hist(EURprice,prob=TRUE,breaks = 20)
 r <- seq(min(EURprice), max(EURprice), length = 177)
 f <- dgamma(r, hatalpha, hatlambda)
 lines(r, f, col = "red", lwd = 2)
-
 ```
 
 ```{r echo=FALSE}
@@ -169,23 +166,14 @@ b=0
 for(i in 1:length(pricelog)){
   b=b+pricelog[i]^2
 }
-
-
 hatlambdalog=(mean(pricelog))/((b/length(pricelog))-mean(pricelog)^2)
 hatalphalog=hatlambdalog*mean(pricelog)
-
 x=1:length(pricelog)
 hist(pricelog,prob=TRUE,breaks = 20)
-#r <- seq(min(EURprice), max(EURprice), length = 177)
 rlog =  seq(min(pricelog), max(pricelog), length = 177)
-#f <- dgamma(r, hatalpha, hatlambda)
 l <- dgamma(rlog, hatalphalog, hatlambdalog)
 lines(rlog, l, col = "red", lwd = 2)
 ```
-
-
-
-\newpage
 
 # 3. One-sample Inference
 
@@ -225,7 +213,24 @@ $$cv=\frac{sd(\hat \theta)}{exp(\hat \theta)} = \frac{\sqrt{\frac{\hat\alpha}{n\
 as for the median value, we can compute the RRMSE $RRMSE=\sqrt{E(\hat\theta-\theta)^2}$
 
 ## 3.3 Confidence interval of 95% for our population mean
-we are not having the true distribution of the price in population, plus we don't know the true mean value and the  variance. So we decide to use the method of the pivotal quantity for $\mu$
+we are not having the true distribution of the price in population, thus we don't know the true mean-value and the  variance. Besides, we are not analyzing a normal distribution. So we can't compute the exact confidence intervals. As an alternative we use central limit theorem.
+
+Firstly for any $X_1...X_n$ $i.i.d.$ with expectation $\mu$ and variance $V(x)=\sigma^2<\infty$,We have 
+
+$$Z_n=\frac{\overline X-\mu}{S'/\sqrt{n}} \stackrel{d}\longrightarrow N(0,1)$$
+
+because we can reform $Z_n$ as 
+$$Z_n=\frac{\overline X-\mu}{S'/\sqrt{n}}=\frac{\overline X-\mu}{\sigma/\sqrt{n}}/\frac{S'}{\sigma}$$
+where 
+$$\frac{\overline X-\mu}{\sigma/\sqrt{n}}\stackrel{d}\longrightarrow N(0,1)$$
+$$\frac{S'}{\sigma}\stackrel{p}\longrightarrow1$$
+according to Slutsky's Theorem, we have
+$$Z_n=\frac{\overline x-\mu}{S'/\sqrt{n}} \stackrel{d}\longrightarrow N(0,1)$$
+so we need to find such $c_1,c_2 \space s.t.$
+
+$$P(c_1<=u<=c_2)=1-\alpha$$
+$$P(\frac{\overline x-c_1}{S'/\sqrt{n}}<=Z_n<=\frac{\overline x-c_2}{S'/\sqrt{n}})=1-\alpha$$
+$$c_1>=\overline x -Z_{\alpha/2}\frac{S'}{\sqrt{n}} \space and \space c_2<= \overline x +Z_{\alpha/2}\frac{S'}{\sqrt{n}}$$
 $$ CI_{1-\alpha}(\mu)=\overline x_n \pm Z_{\alpha/2} \frac{S'}{\sqrt n}$$
 ```{r echo=FALSE}
 CI=c(samplemean+qnorm(0.025)*sqrt(sampleva),samplemean-qnorm(0.025)*sqrt(sampleva))
@@ -272,5 +277,3 @@ c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
 
 \newpage
 
-
-abcdefghijklmn
