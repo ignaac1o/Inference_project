@@ -157,7 +157,6 @@ hatlambda=(mean(pricelog))/((a/length(pricelog))-mean(pricelog)^2)
 hatalpha=hatlambda*mean(pricelog)
 
 x=1:length(pricelog)
-help(hist)
 hist(pricelog,prob=TRUE,breaks = 20)
 r <- seq(min(pricelog), max(pricelog), length = 177)
 f <- dgamma(r, hatalpha, hatlambda)
@@ -205,10 +204,10 @@ $$cv=\frac{sd(\hat \theta)}{exp(\hat \theta)} = \frac{\sqrt{\frac{\hat\alpha}{n\
 as for the median value, we can compute the RRMSE $RRMSE=\sqrt{E(\hat\theta-\theta)^2}$
 
 ## 3.3 Confidence interval of 95% for our population mean
-we are not having the true distribution of the price in population, so we don't know the true variance, thus we don't know the variance of mean value. So we decide to use the method of the pivotal quantity for $\mu$
-$$ CI_{1-\alpha}(\mu)=\overline x_n \pm t_{n-1,\alpha/2} \frac{S'}{\sqrt n}$$
+we are not having the true distribution of the price in population, plus we don't know the true mean value and the  variance. So we decide to use the method of the pivotal quantity for $\mu$
+$$ CI_{1-\alpha}(\mu)=\overline x_n \pm Z_{\alpha/2} \frac{S'}{\sqrt n}$$
 ```{r echo=FALSE}
-CI=c(samplemean+qt(0.025,177)*sqrt(sampleva),samplemean-qt(0.025,i)*sqrt(sampleva))
+CI=c(samplemean+qnorm(0.025)*sqrt(sampleva),samplemean-qnorm(0.025)*sqrt(sampleva))
 CI
 ```
 
