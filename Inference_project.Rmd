@@ -346,7 +346,80 @@ paste("cv of the small cars' prices is", ((var_1/n1)^0.5)/samplemean_s)
 paste("cv of the big cars' prices is", ((var_2/n2)^0.5)/samplemean_b)
 ```
 
+# additional analyze: using bootstrap to interpret the estimator
 
+In section 3, we interpret the properties of two estimators *sample mean*,*sample median value* of the population mean. Considering our sample size is large enough, we can use *CLT* to obtain the approximated distribution of *sample mean*, thus is not very hard to obtain it's properties including *unbiasedness*,*efficiency* even more.
 
+However, as shown in section 3, is always very hard to get the exact distribution of *sample median value* ,especially without normal distribution. For this reason, we only gave the expectation and variance of the *sample median value* from some references. 
 
+To do inference for estimator or the parameters with a more complex distribution, we can now introduce *bootstrap*. The *bootstrap* method mainly using the idea of *resampling*. Here is a brief introduction of this method.
+
+Assuming we have a $s.r.s. \space (x_1,x_2,\dots,x_1000)$ from a unknown distribution $X\sim F(.)$, similarly, we want to estimate the population mean of X by sample mean.
+we first randomly choose 500 items form the whole sample, and compute the mean value and record it as *m_1*, then we repeat this step for 1000 times. Here we are having a set of sample means$(m_1,m_2,\dots,m_{500})$, and with this new set, we can give the expectation and variance of our estimator,
+$$exp(samplemean)= \overline m, var(sample mean)=var(m)$$
+further more, we can reorganize the set $(m_1,m_2,\dots,m_{500})$ from the least to the most, and so we can determine the upper-bound and the lower-bound with 95% quantiles (actually 2.5% and 97.5%) of the 95% confidence interval. that is:
+
+$$CI(sample mean)=(m_{(0.025*500)},m_{(0.975*500)})$$
+Meanwhile, if we want to estimate the sample median value, all we need to do is to compute the median value of each sub-sample.
+
+In R, we can use the package $boostrap$, or as we are not doing a complex computation ,we can do it manually. 
+
+```{r}
+n_iteration=1000 # number of repetition
+i_resample=100 # size of each subsample
+vector_mean=vector()# the set of mean values
+vector_median=vector()# the set of median values
+
+for(i in 1:n_iteration){
+  m=sample(EURprice,size=i_resample,replace = FALSE)
+  vector_mean[i]=mean(m)
+  vector_median[i]=median(m)
+}
+mean_exp=mean(vector_mean)
+median_exp=mean(vector_median)
+
+mean_var=var(vector_mean)
+median_var=var(vector_median)
+```
+
+we can visualize these two vectors:
+
+```{r echo=FALSE}
+mfrow=c(1,2)
+hist(vector_mean)
+hist(vector_median)
+```
+
+this way we obtained two estimator of population mean by $bootstrap$ methods. And we can give their expectations and variances
+```{r echo=FALSE}
+paste("the expectation of sample mean is:", mean_exp)
+paste("the expectation of sample median is:", median_exp)
+paste("the variance of the sample mean is:",mean_var)
+paste("the variance of the sample median is:",median_var)
+```
+
+To obtain their confidence intervals, we need to reorganize the vectors and get the quantiles
+
+```{r}
+mean_ordered=sort(vector_mean)
+median_ordered=sort(vector_median)
+
+upper_mean=mean_ordered[975]
+lower_mean=mean_ordered[25]
+## confidence interval bounds of sample mean
+upper_med=median_ordered[975]
+lower_med=median_ordered[25]
+## confidence interval bounds of sample median
+```
+
+thus we have the estimators' 95% confidence intervals:
+```{r echo=FALSE}
+print("the 95% CI of sample mean is: ")
+c(lower_mean,upper_mean)
+
+print("the 95% CI of sample median is:")
+c(lower_med,upper_med)
+```
+
+we can see that there is an obvious difference between the expectations, and the variance of sample means is larger, that is to say, more scattered.
 
