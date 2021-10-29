@@ -373,7 +373,18 @@ paste("cv of the small cars' prices is", ((var_1/n1)^0.5)/samplemean_s)
 paste("cv of the big cars' prices is", ((var_2/n2)^0.5)/samplemean_b)
 ```
 
-# additional analyze: using bootstrap to interpret the estimator
+## 4.2 Estimate the proportion of Section 3.4 for each population considered in 4.1. Estimate MSE of your estimators.
+
+## 4.3 Using the two subgroups considered in 4.1. Compare the means of the continuous variable for the two subgroups by means of a confidence interval for the difference of means.
+
+## 4.4 Compare the means of the continuous variable for the two subgroups by means of hypothesis testing of equality of means.
+
+## 4.5 Compare the proportion of Section 4.4 for the subgroups by means of a confidence interval for the difference of proportions.
+
+## 4.6 Compare the proportion of Section 4.4 for the two subgrups by means of hypothesis testing of equality of proportions.
+
+
+# Additional analyze: using bootstrap to interpret the estimator
 
 In section 3, we interpret the properties of two estimators *sample mean*,*sample median value* of the population mean. Considering our sample size is large enough, we can use *CLT* to obtain the approximated distribution of *sample mean*, thus is not very hard to obtain it's properties including *unbiasedness*,*efficiency* even more.
 
@@ -440,7 +451,7 @@ lower_med=median_ordered[25]
 ```
 
 thus we have the estimators' 95% confidence intervals:
-```{r echo=FALSE}
+  ```{r echo=FALSE}
 print("the 95% CI of sample mean is: ")
 c(lower_mean,upper_mean)
 
@@ -449,4 +460,10 @@ c(lower_med,upper_med)
 ```
 
 we can see that there is an obvious difference between the expectations, and the variance of sample means is larger, that is to say, more scattered.
+
+# Conclusions
+
+## Summarize and comment on the most important conclusions of your analyses
+
+## Mention limitations and possible extensions of this project
 
