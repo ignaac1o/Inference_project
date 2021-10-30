@@ -188,12 +188,13 @@ By the results obtained we can see that our estimator for $\hat\mu$ is the sampl
 hatmu=mean(pricelog)
 hatsigma=var(pricelog)
 x=1:length(pricelog)
-hist(pricelog,prob=TRUE,breaks = 20,ylim=c(0,2))
+hist(pricelog,prob=TRUE,breaks = 20,ylim=c(0,1.5))
 rlog =  seq(min(pricelog), max(pricelog), length = 177)
 l <- dnorm(rlog, hatmu, sqrt(hatsigma))
 lines(rlog, l, col = "red", lwd = 2)
 ```
 
+Within this last plot we can see that the estimated distribution for our variable "PriceforGermany" transformed with logarithm is very close to the distribution of the variable so we can consider that it follows a normal distribution. 
 
 # 3. One-sample Inference
 
@@ -332,10 +333,13 @@ data_bigcar=data[data$size==1,]
 ## 4.1 population mean of each group
 
 In this section, we choose to divide the sample and population into two subgroups according to the variable *numberofseats*. This variable has four possible values :2,4,5,7. But we can notice that some subgroups have only a few items, so we decide to create a new factor variable *size*. We defined the cars with 5 or less seats as *small* cars, marked with *0*, and the cars with 7 seats as *big* cars, marked with *1*.
+
 ```{r}
 barplot(table(data$size))
 ```
-as we can see that we have 145 small cars and 32 big cars in the sample, and we assume for each group the distribution is still gamma. 
+
+As we can see that we have 145 small cars and 32 big cars in the sample, and we assume for each group the distribution is still gamma. 
+
 In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim Ga(\alpha_1,\beta_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 \sim Ga(\alpha_2,\beta_2)$, where $n_1=145, n_2=32$,$\alpha_1,\alpha_2,\beta_1,\beta_2$ unknown. $X_1,X_2$ independent. 
 
 We can estimate the population mean of *price* in our data, as we did in section 3.1, using sample mean as estimator.
@@ -377,7 +381,59 @@ paste("cv of the big cars' prices is", ((var_2/n2)^0.5)/samplemean_b)
 
 ## 4.3 Using the two subgroups considered in 4.1. Compare the means of the continuous variable for the two subgroups by means of a confidence interval for the difference of means.
 
+We have now two random samples, one with all the cars that have 5 or less seats and another one formed by all the cars that have more than 7 seats. As these are random samples we do not know each population mean and variance.
+
+In order to solve the problem we have to find a pivotal quantity where all the values in it are known. For this reason we are going to use de T statistics where mean and variances are estimated as sample means and sample cuasivariances.
+
+$$T=\frac{\overline X_{1}-\overline{X}_2- (\mu_{1}-\mu_{2})}{\sqrt{\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2}}} \sim t_v $$
+This expression can be considered as a normal due to the Welch-Sattertwaite method, which is used to calculate an approximation to the effective degrees of freedom of a linear combination of independent sample variances. Using this method, we get thw following expression for the degrees of freedom:
+
+$$v=\frac{(\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2})^2}{\frac{S´_1^4}{n_1^2(n_1-1)}+\frac{S´_2^4}{n_2^2(n_2-1)}}$$
+Now that we have our pivotal quantity we have to find our confidence intervals such that $P(c_1\leq T \leq c_2) = 1- \alpha$. Within a few changes our expression to calculate confidence intervals ends up being:
+
+$$CI_{1-\alpha}(\mu_1-\mu_2)= \overline X_1 + \overline X_2 \pm t_{v,1-\alpha/2}\sqrt{\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2}}$$
+Then, a confidence interval for $\mu_1-\mu_2$ at a confidence level of 0.95 is:
+```{r, echo = FALSE}
+sm1=mean(log(data_smallcar$PriceinGermany))
+sm2=mean(log(data_bigcar$PriceinGermany))
+sv1=var(log(data_smallcar$PriceinGermany))
+sv2=var(log(data_bigcar$PriceinGermany))
+n1=length(data_smallcar$PriceinGermany)
+n2=length(data_bigcar$PriceinGermany)
+
+v=(((sv1/n1)+(sv2/n2))^2)/((sv1^2/(n1^2*(n1-1)))+(sv1^2/(n1^2*(n1-1))))
+alpha=0.05
+t=qt(alpha/2,df=v,lower.tail = FALSE)
+
+```
+```{r}
+(sm1-sm2)+c(-1,1)*t*sqrt((sv1/n1)+(sv2/n2))
+```
+ So our $CI_{0.95}(\mu_1-\mu_2)=(-0.25,-0.0319)$
+ 
+ [ref:theorema1](https://ncss-wpengine.netdna-ssl.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Intervals_for_the_Difference_Between_Two_Means.pdf)
+ [ref:theorema2](https://en.wikipedia.org/wiki/Welch–Satterthwaite_equation)
+
 ## 4.4 Compare the means of the continuous variable for the two subgroups by means of hypothesis testing of equality of means.
+
+We assume now the same two populations as in the section 4.3. We will test hypotheses about the difference of means $\mu_1-\mu_2$. We are going to test if there is any major difference in the mean for the prices of the cars in Germany depending on the number of seats at a 5% level of significance.
+
+Denoting $\theta=\mu_1-\mu_2$ we want to test:
+
+$H_{o}: \mu_1-\mu_2$   vs. $H_1: \mu_1 \neq \mu_2$
+
+$H_{o}: \theta=0$ vs. $\theta: \mu_1 \neq \mu_2$
+
+As $\sigma_1^2$ and $\sigma_2^2$ are unknowns, we define our critical region is $Cc=\{|T|>t_{v,1-\alpha/2}\}$ for $v$ denoting the degrees of freedom seen in section 4.3.
+
+Therefore, the test statistic that we are going to use is:
+
+$$T=\frac{\overline X_{1}-\overline{X}_2- (\mu_{1}-\mu_{2})}{\sqrt{\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2}}}$$
+```{r, echo=FALSE}
+t_score=(sm1-sm2)/(sqrt((sv1/n1)+(sv2/n2)))
+```
+
+Solving both equations we get the following results, $T=-2.53$ and $t_{v,1-\alpha/2}=1.96$. Therefore we can see that our T value is is in the critical region. Within this result we need to reject the null hypothesis. Then we can conclude that there is a major significance difference at a 5% significance level that there is a difference between the mean of the prices for cars with less than 5 seats and more than 7.
 
 ## 4.5 Compare the proportion of Section 4.4 for the subgroups by means of a confidence interval for the difference of proportions.
 
