@@ -338,9 +338,9 @@ In this section, we choose to divide the sample and population into two subgroup
 barplot(table(data$size))
 ```
 
-As we can see that we have 145 small cars and 32 big cars in the sample, and we assume for each group the distribution is still gamma. 
+As we can see that we have 145 small cars and 32 big cars in the sample, and we assume for each group the distribution is still normal. 
 
-In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim Ga(\alpha_1,\beta_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 \sim Ga(\alpha_2,\beta_2)$, where $n_1=145, n_2=32$,$\alpha_1,\alpha_2,\beta_1,\beta_2$ unknown. $X_1,X_2$ independent. 
+In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim N(\mu_1,\sigma_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 N(\mu_2,\sigma_2)$, where $n_1=145, n_2=32$,$\mu_1,\mu_2,\sigma_1,\sigma_2$ unknown. $X_1,X_2$ independent. 
 
 We can estimate the population mean of *price* in our data, as we did in section 3.1, using sample mean as estimator.
 
@@ -378,6 +378,21 @@ paste("cv of the big cars' prices is", ((var_2/n2)^0.5)/samplemean_b)
 ```
 
 ## 4.2 Estimate the proportion of Section 3.4 for each population considered in 4.1. Estimate MSE of your estimators.
+Similarly, we also consider a binomial distribution and then apply CLT to get the estimated proportion.
+```{r echo=FALSE}
+print("the estimated porportions for different driven ways in big-car are: ")
+table(data_bigcar$Drive)/n2
+print("the estimated porportions for different driven ways in small-car are: ")
+table(data_smallcar$Drive)/n1
+```
+
+Considering sample mean is an unbiased estimator for population mean, $MSE(\hat p)= B^2(\hat p)+V(\hat p)=0+V(\hat p)=V(\hat p)$. As shown in section 3.4 $V(\hat p)=\frac{\hat p(1-\hat p)}{n}$, where n is the sample size.
+```{r}
+print("MSEs in big-car group are:")
+table(data_bigcar$Drive)/n2*(1-table(data_bigcar$Drive)/n2)/n2
+print("MSEs in small-car group are:")
+table(data_smallcar$Drive)/n1*(table(data_smallcar$Drive)/n1)/n1
+```
 
 ## 4.3 Using the two subgroups considered in 4.1. Compare the means of the continuous variable for the two subgroups by means of a confidence interval for the difference of means.
 
@@ -436,8 +451,37 @@ t_score=(sm1-sm2)/(sqrt((sv1/n1)+(sv2/n2)))
 Solving both equations we get the following results, $T=-2.53$ and $t_{v,\alpha/2}=1.96$. Therefore we can see that our T value is is in the critical region. Within this result we need to reject the null hypothesis. Then we can conclude that there is a major significance difference at a 5% significance level that there is a difference between the mean of the prices for cars with less than 5 seats and more than 7.
 
 ## 4.5 Compare the proportion of Section 4.4 for the subgroups by means of a confidence interval for the difference of proportions.
+first consider a general case, a s.r.s$(x_{11},x_{12},\dots,x_{1n_1})$ from $X_1\sim N(\mu_1,\sigma _1^2)$, another s.r.s$(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2\sim N(\mu_2,\sigma _2^2)$, then we have $\theta =x_1+x_2 \sim(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$
+
+In our case, from above sections we know that the proportions are independently following different normal distributions. We firstly assume a variable $\theta =p_1-p_2$, where $p_1$ represents the proportions from group *big-car*, $p_2$ represents the proportions from group *small-car*. Obviously $\hat\theta \sim N(\hat p_1-\hat p_2, \frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2})$
+
+then as what we have done in section 3.6, find $c_1,c_2$ s.t. $P(c_1<\theta<c_2)=1-\alpha$
+similarly, we have 
+$$\frac{\hat\theta-\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
+so apply all the conclusions we have proved above, we can see that the 95% CIs are (we actually have three proportions, so we can do it for three times):
+$$CI(\hat p_1-\hat p_2)=((\hat p_1-\hat p_2)+Z_{\alpha/2}\sqrt{\frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2}},(\hat p_1-\hat p_2)-Z_{\alpha/2}\sqrt{\frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2}}$$
+
+```{r echo=FALSE}
+s=sqrt(table(data_bigcar$Drive)/n2*(1-table(data_bigcar$Drive)/n2)/n2+table(data_smallcar$Drive)/n1*(1-table(data_smallcar$Drive)/n1)/n1)
+s
+print("the lower bounds of the 95% CIs are:")
+table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1+qnorm(0.025)*s
+print("the uuper bounds of the 95% CIs are:")
+table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1-qnorm(0.025)*s
+```
 
 ## 4.6 Compare the proportion of Section 4.4 for the two subgrups by means of hypothesis testing of equality of proportions.
+we can adapt the definitions of general case in section 4.5 and determine the hypothesis we are using. We also assume $\theta=p_1-p_2$, if $p_1=p_2$, obviously $\theta=0$, so our null hypothesis is $H_0: \theta=0$, and the alternative hypothesis is:$H_1: \theta \ne 0$. 
+$$\hat\theta \sim N(\hat p_1-\hat p_2, \frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2})$$
+$$Z=\frac{\hat\theta-\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
+since we are checking if $\theta=0$,
+$$Z=\frac{\hat\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
+And we will reject the null hypothesis if $Z_{obs}<Z_{0.025} orZ{obs}>Z_{0.975}$(means the proportions in two groups are same), otherwise we will accept the null hypothesis(means they are not same). ($\alpha=0.05$ and $Z_{0.025}=-1.96,Z_{0.975}=1.96$)
+
+```{r echo=FALSE}
+(table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1)/s
+```
+We can see that we should reject that the proportions are same, for all three types.
 
 
 # Additional analyze: using bootstrap to interpret the estimator
