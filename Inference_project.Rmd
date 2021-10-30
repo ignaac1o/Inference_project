@@ -338,9 +338,9 @@ In this section, we choose to divide the sample and population into two subgroup
 barplot(table(data$size))
 ```
 
-As we can see that we have 145 small cars and 32 big cars in the sample, and we assume for each group the distribution is still gamma. 
+As we can see that we have 145 small cars and 32 big cars in the sample, and we assume for each group the distribution is still normal. 
 
-In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim Ga(\alpha_1,\beta_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 \sim Ga(\alpha_2,\beta_2)$, where $n_1=145, n_2=32$,$\alpha_1,\alpha_2,\beta_1,\beta_2$ unknown. $X_1,X_2$ independent. 
+In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim N(\mu_1,\sigma_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 N(\mu_2,\sigma_2)$, where $n_1=145, n_2=32$,$\mu_1,\mu_2,\sigma_1,\sigma_2$ unknown. $X_1,X_2$ independent. 
 
 We can estimate the population mean of *price* in our data, as we did in section 3.1, using sample mean as estimator.
 
