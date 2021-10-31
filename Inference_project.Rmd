@@ -553,7 +553,7 @@ lower_med=median_ordered[25]
 ```
 
 thus we have the estimators' 95% confidence intervals:
-  ```{r echo=FALSE}
+```{r echo=FALSE}
 print("the 95% CI of sample mean is: ")
 c(lower_mean,upper_mean)
 
@@ -562,6 +562,8 @@ c(lower_med,upper_med)
 ```
 
 we can see that there is an obvious difference between the expectations, and the variance of sample means is larger, that is to say, more scattered.
+
+*for this part we are using the original data instead of log_transformed data because we don't care about the distribution, maybe we can consider this as a nonparametric interpretation
 
 # Conclusions
 
