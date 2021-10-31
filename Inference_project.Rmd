@@ -1,7 +1,7 @@
 ---
 title: "Inference_project"
 author: Ignacio Almodóar & Limingrui Wan
-output: html_document
+output: pdf_document
 ---
 
 
@@ -95,6 +95,7 @@ data=read.csv("EV_DATASET_woNA.csv",dec = ",")
 data$PriceinGermany[is.na(data$PriceinGermany)]=data$PriceinUK[is.na(data$PriceinGermany)]*1.15
 data=data[-c(29,120,129),]
 data$PriceinGermany=data$PriceinGermany*1000
+l_data=length(data$PriceinGermany)
 ```
 
 
@@ -107,15 +108,13 @@ EURprice=data$PriceinGermany
 ```
 
 ```{r echo=FALSE}
+pricelog=log(EURprice)
+par(mfrow=c(1,2))
 hist(EURprice)
+hist(pricelog,prob=TRUE)
 ```
 
 By analyzing this plot we can assume that it follows a gamma distribution $\Gamma(\alpha,\lambda)$. We are also going to transform our data applying logarithms to it and see if its shape can be estimated as a normal.
-
-```{r echo=FALSE}
-pricelog=log(EURprice)
-hist(pricelog,prob=TRUE)
-```
 
 Applying logarithm we get a much symmetric distribution, that can be considered as a normal distribution.
 
@@ -153,19 +152,6 @@ $$\hat\alpha=\overline X\hat\lambda=\frac{\overline X^2}{\frac{1}{n}\sum_{i=0}^n
 
 Using these results we can calculate our estimators using R. We are going to compute the estimators of our variable. Running the code above we can say that our variable "Price in Germany" follows a $\Gamma(\hat\alpha,\hat\lambda)$ with parameters $\hat\alpha=3.3$ and $\hat\lambda=5.649*10^-5$.
 
-```{r}
-a=0
-for(i in 1:length(EURprice)){
-  a=a+EURprice[i]^2
-}
-hatlambda=(mean(EURprice))/((a/length(EURprice))-mean(EURprice)^2)
-hatalpha=hatlambda*mean(EURprice)
-hist(EURprice,prob=TRUE,breaks = 20)
-r <- seq(min(EURprice), max(EURprice), length = 177)
-f <- dgamma(r, hatalpha, hatlambda)
-lines(r, f, col = "red", lwd = 2)
-```
-
 For the logarithm transformation we are considering that our variable follows a normal distribution so, in order to estimate our parameters we are going yo use the Maximum Likelihood method. For this purpose we have to compute $\frac{\partial}{\partial\theta_{k}}L(\theta;x_{1},...,x_{n})=0$. This will give us a system of equations from where we can obtain each of our estimators.
 
 Therefore, for a normal distribution we have:
@@ -184,7 +170,22 @@ $$\hat\mu=\overline{x}_n$$
 $$\hat\sigma=\frac{1}{n}\sum(x_i-\overline{x})^2$$
 By the results obtained we can see that our estimator for $\hat\mu$ is the sample mean, whereas for $\hat\sigma$ we have the sample variance.
 
-```{r }
+Within this last plot we can see that the estimated distribution for our variable "PriceforGermany" transformed with logarithm is very close to the distribution of the variable so we can consider that it follows a normal distribution. 
+
+```{r echo=FALSE}
+a=0
+for(i in 1:length(EURprice)){
+  a=a+EURprice[i]^2
+}
+hatlambda=(mean(EURprice))/((a/length(EURprice))-mean(EURprice)^2)
+hatalpha=hatlambda*mean(EURprice)
+par(mfrow=c(1,2))
+hist(EURprice,prob=TRUE,breaks = 20)
+r <- seq(min(EURprice), max(EURprice), length = 177)
+f <- dgamma(r, hatalpha, hatlambda)
+lines(r, f, col = "red", lwd = 2)
+
+
 hatmu=mean(pricelog)
 hatsigma=var(pricelog)
 x=1:length(pricelog)
@@ -194,49 +195,38 @@ l <- dnorm(rlog, hatmu, sqrt(hatsigma))
 lines(rlog, l, col = "red", lwd = 2)
 ```
 
-Within this last plot we can see that the estimated distribution for our variable "PriceforGermany" transformed with logarithm is very close to the distribution of the variable so we can consider that it follows a normal distribution. 
-
+\newpage
 # 3. One-sample Inference
 
 ## 3.1 Estimators for our population mean
 
-### unbiasedness
-
-In this section we can use sample mean and sample median value to estimate our population mean.
+In this section we can use sample mean and sample median value to estimate our population mean. The sample mean is 10.86,sample median is 10.82
 ```{r echo=FALSE}
 samplemean=mean(pricelog)
 sampleva=var(pricelog)
-paste("the sample mean is ",samplemean)
-paste("the sample median is ", median(pricelog))
 ```
 we can quickly give the distribution of the sample mean with CLT:
 $$\hat\theta \sim N(\mu,\sigma^2/n)$$
 
-obviously the sample mean is an unbiased estimator, since $exp(\hat\theta)=\mu$. Meanwhile, as we assume that it's a normal distribution, it's symmetric, thus sample median value is also unbiased $exp(med)=\mu$ and the variance of sample mean is$\hat \sigma^2/n=0.001$
+obviously the sample mean is an unbiased estimator, since $exp(samplemean)=\mu$. Meanwhile, as we assume that it's a normal distribution, it's symmetric, thus sample median value is also unbiased $exp(med)=\mu$.
 
-However, it's not easy to obtain the real distribution of sample median value(to get the expectation and variance), firstly we get the pdf of the sample median value via the formula for order statistics, which is
-
-$$\rho_k(x) = \frac{n!}{(k-1)!(n-k)!}(F(x))^{k-1}(1-F(x))^{n-k}\rho(x) $$
-where n is the total number, k is the sequence number(2/n when we are ), $\rho(x)$ is the pdf of the original distribution(normal distribution), $F(x)$ is the cdf of the original distribution. So we shall calculate such indefinite integral:
-$$\int x\rho_k(x) \space dx$$
-
-so far we can see the computation is too complex, but the variance is given in the slides or others reference
-$$V(med) \approx \frac{\pi \sigma^2}{2n}=0.016$$
+However, it's not easy to obtain the real distribution of sample median value(to get the expectation and variance), firstly we get the pdf of the sample median value via the formula for ordered statistics, which is$\rho_k(x) =\frac{n!}{(k-1)!(n-k)!}(F(x))^{k-1}(1-F(x))^{n-k}\rho(x)$,
+where n is the total number, k is the sequence number, $\rho(x)$ is the pdf of the original distribution(normal distribution), $F(x)$ is the cdf of the original distribution. So we shall calculate such indefinite integral to get it's expectation:$\int x\rho_k(x) \space dx$,However, so far the computation is too complex, thus we decide to use the approximated variance given in the slides and others reference
+$$V(med) \approx \frac{\pi \sigma^2}{2n}$$
 
 In order to check if the estimator is efficient, we just have to check their fisher information$I_n(\theta)=\frac {n}{\sigma^2}=v(\overline x)<v(med)$, so only sample mean is efficient.
 
 Obviously, sample mean has smaller variance and more efficient, but median value is more robust, can afford more missing of sample or more outliers.
 
 ## 3.2 Estimation of the errors of the two estimators
-Since sample mean and sample median value are both unbiased estimators, so we can calculate the error by CV, which is 
+Since sample mean and sample median value are both unbiased, we can calculate the error by CV, which is 
 $$cv=\frac{sd(\hat \theta)}{exp(\hat \theta)} $$
 
-```{r}
+$cv(mean)=0.042,cv(med)=0.066$
+
+```{r echo=FALSE}
 cv1=(hatsigma)^0.5/hatmu
 cv2=cv1*1.57
-paste("the error(cv) of sample mean is",cv1)
-paste("the error(cv) of sample median value is",cv2)
-
 ```
 
 
@@ -249,21 +239,14 @@ We are having a normal assumption of the distribution, so we use *exact confiden
 We have $(x_1,x_2,\dots,x_n)$s.r.s. form a r.v.$N(\mu,\sigma^2)$, where $\mu, \sigma$unknown, and $n=177$, it holds
 $$T=\frac{\overline x-\mu}{S_n'/\sqrt{n}}\sim t_{n-1}$$
 
-then we just have to find such $t_1,t_2$ s.t.
-$$P(t_1<T<t_2)=1-\alpha$$
+then we  have to find such $t_1,t_2$ s.t.$P(t_1<T<t_2)=1-\alpha$
 $$P(\frac{\overline x-c_1}{S'/\sqrt n}<\frac{\overline x-\mu}{S'/\sqrt n}<\frac{\overline x-c_2}{S'/\sqrt n})=1-\alpha$$
 
 $$P(\frac{\overline x-c_1}{S'/\sqrt n}<T<\frac{\overline x-c_2}{S'/\sqrt n})=1-\alpha$$
-so we have 
-$$c_1=\overline x +t_{n-1,\alpha/2}*\frac{S'}{\sqrt n},c_2=\overline x -t_{n-1,\alpha/2}*\frac{S'}{\sqrt n}$$
-the CI is
 $$CI_{1-\alpha}(\mu)=(\overline x +t_{n-1,\alpha/2}*\frac{S'}{\sqrt n},\overline x -t_{n-1,\alpha/2}*\frac{S'}{\sqrt n})$$
-where $\alpha=0.05$
-
+ as the result, the 95% CI of population mean is (9.96,11.76)
 ```{r echo=FALSE}
 CI=c(samplemean+qt(0.025,df=176)*sqrt(sampleva),samplemean+qt(0.975,df=176)*sqrt(sampleva))
-print("95% CI of population mean is:")
-CI
 ```
 
 
@@ -271,50 +254,42 @@ CI
 We divide the sample into three groups according to the variable "drive", which implies how the specific car is driven. We consider a Binomial distribution$Bern(p)$, the estimator actually estimate the mean value of the probability in a Binomial test, so the distribution of estimated proportion is$N(p,\frac{1(1-p)}{n})$
 ```{r echo=FALSE}
 data$Drive=as.factor(data$Drive)
-table(data$Drive)
-plot(data$Drive)
 ```
-the estimated proportion is:
+the estimated proportion is:(0.362,0.284,0.254)
 ```{r echo=FALSE}
 p1=64/177
 p2=68/177
 p3=45/177
-paste("the estimated proportion of All wheel Drive car is ",p1 )
-paste("the estimated proportion of Front Wheel Drive car is ",p2 )
-paste("the estimated proportion of Rear Wheel Drive  car is ",p3 )
 ```
 
 ## 3.5 Variance of our estimator of proportion
-since we have obtained the distribution of $\overline x$,we can easily get the variance of the estimator:
+since we have obtained the distribution of $\overline x$,we can easily get the variance of the estimator:(0.0013,0.0013,0.0011)
 ```{r echo=FALSE}
-n=177
-v1=p1*(1-p1)/n
-v2=p2*(1-p2)/n
-v3=p3*(1-p3)/n
-v1
-v2
-v3
+v1=p1*(1-p1)/l_data
+v2=p2*(1-p2)/l_data
+v3=p3*(1-p3)/l_data
 ```
+
 ## 3.6 Population proportion with 95% of confidence interval
+from our previous work, we notice that the proportion actually is $\overline x=\hat p$, and with CLT we can give it's distribution
+$\overline x \sim N(\hat p,\frac{\hat p(1-\hat p)}{n})$,
 
-from our previous work, we notice that the sample proportion actually is $\overline x$, and its distribution is 
-$$\overline x \sim N(p,\frac{p(1-p)}{n})$$
-
-so we have such conclusions:
-$$\frac{\overline x-p}{\sqrt{\overline x(1-\overline x)}}\stackrel{d}\longrightarrow N(0,1)$$
+so we have:
+$$\frac{\overline x-p}{\sqrt{p(1-p)/n}}\stackrel{d}\longrightarrow N(0,1)$$
 $$\sqrt{\frac{\overline x(1-\overline x)}{p(1-p)}}\stackrel{p}\longrightarrow 1$$
-according to  Slutsky' th we know that
+combining above two lines, and according to the Slutsky' th :
 $$Z=\frac{\overline x-p}{\sqrt{\frac{\overline x(1-\overline x)}{n}}}\stackrel{d}\longrightarrow N(0,1)$$
 so now we only need to find such $c_1,c_2 \space s.t.$
 $$P(c_1<=p<=c2)=1-\alpha$$
 $$P(\frac{\overline x-c_1}{\sqrt{\frac{\overline x(1-\overline x)}{n}}}<=Z<=\frac{\overline x-c_2}{\sqrt{\frac{\overline x(1-\overline x)}{n}}})=1-\alpha$$
-notice in this case $\hat p=\overline x$, we have such bounds
 
 $$\hat p \pm Z_{\alpha/2} \sqrt{\frac{\hat p(1-\hat p)}{n}}$$
+and the intervals of three proportions are: all wheel driven cars (0.29,0.43),front wheel driven cars(0.31,0.46),rear wheel driven cars (0.19,0.31)
+
 ```{r echo=FALSE}
-c(p1+qnorm(0.025)*sqrt(v1),p1-qnorm(0.025)*sqrt(v1))
-c(p2+qnorm(0.025)*sqrt(v2),p2-qnorm(0.025)*sqrt(v2))
-c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
+ci_p1=c(p1+qnorm(0.025)*sqrt(v1),p1-qnorm(0.025)*sqrt(v1))
+ci_p2=c(p2+qnorm(0.025)*sqrt(v2),p2-qnorm(0.025)*sqrt(v2))
+ci_p3=c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
 ```
 
 \newpage
@@ -325,7 +300,6 @@ c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
 ```{r echo=FALSE}
 data$size=1
 data$size[data$NumberofSeats!=7]=0
-table(data$NumberofSeats)
 data_smallcar=data[data$size==0,]
 data_bigcar=data[data$size==1,]
 ```
@@ -334,18 +308,13 @@ data_bigcar=data[data$size==1,]
 
 In this section, we choose to divide the sample and population into two subgroups according to the variable *numberofseats*. This variable has four possible values :2,4,5,7. But we can notice that some subgroups have only a few items, so we decide to create a new factor variable *size*. We defined the cars with 5 or less seats as *small* cars, marked with *0*, and the cars with 7 seats as *big* cars, marked with *1*.
 
-```{r}
-barplot(table(data$size))
-```
-
-As we can see that we have 145 small cars and 32 big cars in the sample, and we assume for each group the distribution is still normal. 
+there are 145 small cars and 32 big cars in the sample, and we assume for each subgroup the distribution is still normal. 
 
 In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim N(\mu_1,\sigma_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 N(\mu_2,\sigma_2)$, where $n_1=145, n_2=32$,$\mu_1,\mu_2,\sigma_1,\sigma_2$ unknown. $X_1,X_2$ independent. 
 
 We can estimate the population mean of *price* in our data, as we did in section 3.1, using sample mean as estimator.
 
-$$\hat\mu_1=\overline x_1, \space\hat\mu_2=\overline x_2 $$
-
+$$\hat\mu_1=\overline x_1=10.84, \space\hat\mu_2=\overline x_2=10.98 $$
 ```{r echo=FALSE}
 n1=length(data_smallcar$PriceinGermany)
 n2=length(data_bigcar$PriceinGermany)
@@ -353,8 +322,6 @@ data_smallcar$PriceinGermany=log(data_smallcar$PriceinGermany)
 data_bigcar$PriceinGermany=log(data_bigcar$PriceinGermany)
 samplemean_s=mean(data_smallcar$PriceinGermany)
 samplemean_b=mean(data_bigcar$PriceinGermany)
-paste("mean price of the small cars is", samplemean_s)
-paste("mean price of the big cars is", samplemean_b)
 ```
 in order to get the coefficient of variation, we need to know the variance of the estimator, we can use $S'^2$ to estimate the population variance.
 ```{r echo=FALSE}
@@ -372,29 +339,13 @@ var_2=var_2/(n1-1)
 paste("estimated variance of price in small cars is ", var_1)
 paste("estimated variance of price in big cars is", var_2)
 ```
-so far we give the distribution of our estimator and compute their CVs:
-$$\hat\mu_1 \sim N(\overline x_1,v(x_1)/n_1),\hat\mu_2 \sim N(\overline x_2,v(x_2)/n_2)$$
-```{r echo=FALSE}
-paste("cv of the small cars' prices is", ((var_1/n1)^0.5)/samplemean_s)
-paste("cv of the big cars' prices is", ((var_2/n2)^0.5)/samplemean_b)
-```
+so far we give the distribution of our estimator and compute their CVs: $\hat\mu_1 \sim N(10.84,0.24),\hat\mu_2 \sim N(10.98,0.01)$, $cv(\hat\mu_1)=0.0037,cv(\hat\mu_2)=0.0016$.
 
 ## 4.2 Estimate the proportion of Section 3.4 for each population considered in 4.1. Estimate MSE of your estimators.
-Similarly, we also consider a binomial distribution and then apply CLT to get the estimated proportion.
-```{r echo=FALSE}
-print("the estimated porportions for different driven ways in big-car are: ")
-table(data_bigcar$Drive)/n2
-print("the estimated porportions for different driven ways in small-car are: ")
-table(data_smallcar$Drive)/n1
-```
+Similarly, we also consider a binomial test and then apply CLT to get the estimated proportion.
+The estimated proportions in big-car subgroups are: all-wheel 0.22, front-wheel 0.75, rear wheel 0.03.In small-car subgroup: all-wheel 0.393,front-wheel 0.303,rear-wheel 0.303.
 
-Considering sample mean is an unbiased estimator for population mean, $MSE(\hat p)= B^2(\hat p)+V(\hat p)=0+V(\hat p)=V(\hat p)$. As shown in section 3.4 $V(\hat p)=\frac{\hat p(1-\hat p)}{n}$, where n is the sample size.
-```{r}
-print("MSEs in big-car group are:")
-table(data_bigcar$Drive)/n2*(1-table(data_bigcar$Drive)/n2)/n2
-print("MSEs in small-car group are:")
-table(data_smallcar$Drive)/n1*(table(data_smallcar$Drive)/n1)/n1
-```
+Considering sample mean is an unbiased estimator for population mean, $MSE(\hat p)= B^2(\hat p)+V(\hat p)=0+V(\hat p)=V(\hat p)$. As shown in section 3.4 $V(\hat p)=\frac{\hat p(1-\hat p)}{n}$, where n is the sample size. so we have $cv_{bigcar}(\hat p _{1,2,3} )=(0.0053,0.0059,0.0009),cv_{smallcxar}(\hat p_{1,2,3})=(0.0010,0.0006,0.0006)$
 
 ## 4.3 Using the two subgroups considered in 4.1. Compare the means of the continuous variable for the two subgroups by means of a confidence interval for the difference of means.
 
@@ -411,10 +362,10 @@ Now that we have our pivotal quantity we have to find our confidence intervals s
 $$CI_{1-\alpha}(\mu_1-\mu_2)= \overline X_1 + \overline X_2 \pm t_{v,\alpha/2}\sqrt{\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2}}$$
 Then, a confidence interval for $\mu_1-\mu_2$ at a confidence level of 0.95 is:
 ```{r, echo = FALSE}
-sm1=mean(log(data_smallcar$PriceinGermany))
-sm2=mean(log(data_bigcar$PriceinGermany))
-sv1=var(log(data_smallcar$PriceinGermany))
-sv2=var(log(data_bigcar$PriceinGermany))
+sm1=mean(data_smallcar$PriceinGermany)
+sm2=mean(data_bigcar$PriceinGermany)
+sv1=var(data_smallcar$PriceinGermany)
+sv2=var(data_bigcar$PriceinGermany)
 n1=length(data_smallcar$PriceinGermany)
 n2=length(data_bigcar$PriceinGermany)
 
@@ -423,7 +374,8 @@ alpha=0.05
 t=qt(alpha/2,df=v,lower.tail = FALSE)
 
 ```
-```{r}
+
+```{r echo=FALSE}
 (sm1-sm2)+c(-1,1)*t*sqrt((sv1/n1)+(sv2/n2))
 ```
  So our $CI_{0.95}(\mu_1-\mu_2)=(-0.25,-0.0319)$
@@ -459,13 +411,12 @@ In our case, from above sections we know that the proportions are independently 
 
 then as what we have done in section 3.6, find $c_1,c_2$ s.t. $P(c_1<\theta<c_2)=1-\alpha$
 similarly, we have 
-$$\frac{\hat\theta-\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
+$$\frac{\hat\theta-\theta}{\hat\sigma(\hat\theta) }\sim N(0,1)$$
 so apply all the conclusions we have proved above, we can see that the 95% CIs are (we actually have three proportions, so we can do it for three times):
 $$CI(\hat p_1-\hat p_2)=((\hat p_1-\hat p_2)+Z_{\alpha/2}\sqrt{\frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2}},(\hat p_1-\hat p_2)-Z_{\alpha/2}\sqrt{\frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2}}$$
 
 ```{r echo=FALSE}
 s=sqrt(table(data_bigcar$Drive)/n2*(1-table(data_bigcar$Drive)/n2)/n2+table(data_smallcar$Drive)/n1*(1-table(data_smallcar$Drive)/n1)/n1)
-s
 print("the lower bounds of the 95% CIs are:")
 table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1+qnorm(0.025)*s
 print("the uuper bounds of the 95% CIs are:")
@@ -475,9 +426,8 @@ table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1-qnorm(0.025)*s
 ## 4.6 Compare the proportion of Section 4.4 for the two subgrups by means of hypothesis testing of equality of proportions.
 we can adapt the definitions of general case in section 4.5 and determine the hypothesis we are using. We also assume $\theta=p_1-p_2$, if $p_1=p_2$, obviously $\theta=0$, so our null hypothesis is $H_0: \theta=0$, and the alternative hypothesis is:$H_1: \theta \ne 0$. 
 $$\hat\theta \sim N(\hat p_1-\hat p_2, \frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2})$$
-$$Z=\frac{\hat\theta-\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
 since we are checking if $\theta=0$,
-$$Z=\frac{\hat\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
+$$Z=\frac{\hat\theta}{\hat\sigma(\hat\theta) }\sim N(0,1)$$
 And we will reject the null hypothesis if $Z_{obs}<Z_{0.025} orZ{obs}>Z_{0.975}$(means the proportions in two groups are same), otherwise we will accept the null hypothesis(means they are not same). ($\alpha=0.05$ and $Z_{0.025}=-1.96,Z_{0.975}=1.96$)
 
 ```{r echo=FALSE}
@@ -485,7 +435,7 @@ And we will reject the null hypothesis if $Z_{obs}<Z_{0.025} orZ{obs}>Z_{0.975}$
 ```
 We can see that we should reject that the proportions are same, for all three types.
 
-
+\newpage
 # Additional analyze: using bootstrap to interpret the estimator
 
 In section 3, we interpret the properties of two estimators *sample mean*,*sample median value* of the population mean. Considering our sample size is large enough, we can use *CLT* to obtain the approximated distribution of *sample mean*, thus is not very hard to obtain it's properties including *unbiasedness*,*efficiency* even more.
@@ -525,7 +475,7 @@ median_var=var(vector_median)
 we can visualize these two vectors:
 
 ```{r echo=FALSE}
-mfrow=c(1,2)
+par(mfrow=c(1,2))
 hist(vector_mean)
 hist(vector_median)
 ```
@@ -565,6 +515,7 @@ we can see that there is an obvious difference between the expectations, and the
 
 *for this part we are using the original data instead of log_transformed data because we don't care about the distribution, maybe we can consider this as a nonparametric interpretation
 
+\newpage
 # Conclusions
 
 ## Summarize and comment on the most important conclusions of your analyses
