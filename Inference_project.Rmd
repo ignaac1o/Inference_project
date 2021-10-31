@@ -349,6 +349,8 @@ $$\hat\mu_1=\overline x_1, \space\hat\mu_2=\overline x_2 $$
 ```{r echo=FALSE}
 n1=length(data_smallcar$PriceinGermany)
 n2=length(data_bigcar$PriceinGermany)
+data_smallcar$PriceinGermany=log(data_smallcar$PriceinGermany)
+data_bigcar$PriceinGermany=log(data_bigcar$PriceinGermany)
 samplemean_s=mean(data_smallcar$PriceinGermany)
 samplemean_b=mean(data_bigcar$PriceinGermany)
 paste("mean price of the small cars is", samplemean_s)
