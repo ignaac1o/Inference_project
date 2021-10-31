@@ -408,7 +408,7 @@ This expression can be considered as a normal due to the Welch-Sattertwaite meth
 $$v=\frac{(\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2})^2}{\frac{S´_1^4}{n_1^2(n_1-1)}+\frac{S´_2^4}{n_2^2(n_2-1)}}$$
 Now that we have our pivotal quantity we have to find our confidence intervals such that $P(c_1\leq T \leq c_2) = 1- \alpha$. Within a few changes our expression to calculate confidence intervals ends up being:
 
-$$CI_{1-\alpha}(\mu_1-\mu_2)= \overline X_1 + \overline X_2 \pm t_{v,1-\alpha/2}\sqrt{\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2}}$$
+$$CI_{1-\alpha}(\mu_1-\mu_2)= \overline X_1 + \overline X_2 \pm t_{v,\alpha/2}\sqrt{\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2}}$$
 Then, a confidence interval for $\mu_1-\mu_2$ at a confidence level of 0.95 is:
 ```{r, echo = FALSE}
 sm1=mean(log(data_smallcar$PriceinGermany))
@@ -450,7 +450,7 @@ $$T=\frac{\overline X_{1}-\overline{X}_2- (\mu_{1}-\mu_{2})}{\sqrt{\frac{S´_1^2
 t_score=(sm1-sm2)/(sqrt((sv1/n1)+(sv2/n2)))
 ```
 
-Solving both equations we get the following results, $T=-2.53$ and $t_{v,1-\alpha/2}=1.96$. Therefore we can see that our T value is is in the critical region. Within this result we need to reject the null hypothesis. Then we can conclude that there is a major significance difference at a 5% significance level that there is a difference between the mean of the prices for cars with less than 5 seats and more than 7.
+Solving both equations we get the following results, $T=-2.53$ and $t_{v,\alpha/2}=1.96$. Therefore we can see that our T value is is in the critical region. Within this result we need to reject the null hypothesis. Then we can conclude that there is a major significance difference at a 5% significance level that there is a difference between the mean of the prices for cars with less than 5 seats and more than 7.
 
 ## 4.5 Compare the proportion of Section 4.4 for the subgroups by means of a confidence interval for the difference of proportions.
 first consider a general case, a s.r.s$(x_{11},x_{12},\dots,x_{1n_1})$ from $X_1\sim N(\mu_1,\sigma _1^2)$, another s.r.s$(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2\sim N(\mu_2,\sigma _2^2)$, then we have $\theta =x_1+x_2 \sim(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$
