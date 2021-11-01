@@ -173,7 +173,7 @@ $$\hat\mu=\overline{x}_n$$
 $$\hat\sigma=\frac{1}{n}\sum(x_i-\overline{x})^2$$
 By the results obtained we can see that our estimator for $\hat\mu$ is the sample mean, whereas for $\hat\sigma$ we have the sample variance.
 
-Within this last plot we can see that the estimated distribution for our variable "PriceforGermany" transformed with logarithm is very close to the distribution of the variable so we can consider that it follows a normal distribution. 
+Within this last plot we can see that the estimated distribution for our variable "PriceforGermany" transformed with logarithm is very close to the distribution of the variable so we can consider that it follows a normal distribution $N(10.86,0.2)$. 
 
 ```{r echo=FALSE}
 a=0
@@ -202,7 +202,7 @@ lines(rlog, l, col = "red", lwd = 2)
 
 ## 3.1 Estimators for our population mean
 
-In this section we can use sample mean and sample median value to estimate our population mean. The sample mean is 10.86,sample median is 10.82.
+In this section we can use sample mean and sample median value to estimate our population mean. The sample mean is 10.86, whereas sample median is 10.82.
 
 ```{r echo=FALSE}
 samplemean=mean(pricelog)
@@ -226,7 +226,7 @@ Obviously, sample mean has smaller variance and more efficient, but median value
 Since sample mean and sample median value are both unbiased, we can calculate the error by CV, which is 
 $$cv=\frac{sd(\hat \theta)}{exp(\hat \theta)} $$
 
-$cv(mean)=0.042,cv(med)=0.066$
+Within this we get: $cv(mean)=0.042,cv(med)=0.066$
 
 ```{r echo=FALSE}
 cv1=(hatsigma)^0.5/hatmu
@@ -244,7 +244,7 @@ We are having a normal assumption of the distribution, so we use *exact confiden
 We have $(x_1,x_2,\dots,x_n)$ s.r.s. form a r.v. $N(\mu,\sigma^2)$, where $\mu, \sigma$unknown, and $n=177$, it holds
 $$T=\frac{\overline x-\mu}{S_n'/\sqrt{n}}\sim t_{n-1}$$
 
-then we  have to find such $t_1,t_2$ s.t.$P(t_1<T<t_2)=1-\alpha$
+Then we  have to find such $t_1,t_2$ s.t.$P(t_1<T<t_2)=1-\alpha$
 
 $$P(\frac{\overline x-c_1}{S'/\sqrt n}<\frac{\overline x-\mu}{S'/\sqrt n}<\frac{\overline x-c_2}{S'/\sqrt n})=1-\alpha$$
 
@@ -267,7 +267,7 @@ We divided the sample into three groups according to the variable "drive", which
 data$Drive=as.factor(data$Drive)
 ```
 
-the estimated proportion is:(0.362,0.284,0.254)
+The estimated proportion obtained is:(0.362,0.284,0.254)
 
 ```{r echo=FALSE}
 p1=64/177
@@ -277,7 +277,7 @@ p3=45/177
 
 ## 3.5 Variance of our estimator of proportion
 
-Since we have obtained the distribution of $\overline x$,we can easily get the variance of the estimator:(0.0013,0.0013,0.0011)
+Since we have obtained the distribution of $\overline x$, we can easily get the variance of the estimator with $\frac{1(1-p)}{n}$. We obtained the following variances: (0.0013,0.0013,0.0011)
 
 ```{r echo=FALSE}
 v1=p1*(1-p1)/l_data
@@ -289,17 +289,17 @@ v3=p3*(1-p3)/l_data
 From our previous work, we notice that the proportion actually is $\overline x=\hat p$, and with CLT we can give it's distribution
 $\overline x \sim N(\hat p,\frac{\hat p(1-\hat p)}{n})$,
 
-so we have:
+So we have:
 $$\frac{\overline x-p}{\sqrt{p(1-p)/n}}\stackrel{d}\longrightarrow N(0,1)$$
 $$\sqrt{\frac{\overline x(1-\overline x)}{p(1-p)}}\stackrel{p}\longrightarrow 1$$
 Combining above two lines, and according to the Slutsky' th :
 $$Z=\frac{\overline x-p}{\sqrt{\frac{\overline x(1-\overline x)}{n}}}\stackrel{d}\longrightarrow N(0,1)$$
-so now we only need to find such $c_1,c_2 \space s.t.$
+Now we only need to find such $c_1,c_2 \space s.t.$
 $$P(c_1<=p<=c2)=1-\alpha$$
 $$P(\frac{\overline x-c_1}{\sqrt{\frac{\overline x(1-\overline x)}{n}}}<=Z<=\frac{\overline x-c_2}{\sqrt{\frac{\overline x(1-\overline x)}{n}}})=1-\alpha$$
 
 $$\hat p \pm Z_{\alpha/2} \sqrt{\frac{\hat p(1-\hat p)}{n}}$$
-and the intervals of three proportions are: all wheel driven cars (0.29,0.43),front wheel driven cars(0.31,0.46),rear wheel driven cars (0.19,0.31)
+The intervals of three proportions obtained are: all wheel driven cars (0.29,0.43),front wheel driven cars(0.31,0.46),rear wheel driven cars (0.19,0.31)
 
 ```{r echo=FALSE}
 ci_p1=c(p1+qnorm(0.025)*sqrt(v1),p1-qnorm(0.025)*sqrt(v1))
@@ -325,7 +325,7 @@ In this section, we choose to divide the sample and population into two subgroup
 
 There are 145 small cars and 32 big cars in the sample, and we assume for each subgroup the distribution is still normal.  
 
-In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim N(\mu_1,\sigma_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 N(\mu_2,\sigma_2)$, where $n_1=145, n_2=32$,$\mu_1,\mu_2,\sigma_1,\sigma_2$ unknown. $X_1,X_2$ independent. 
+In general, the case could be describe mathematically as: There is a s.r.s. $(x_{11},x_{12} ,\dots,x_{1n_1})$ from $X_1 \sim N(\mu_1,\sigma_1)$ , and another s.r.s. $(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2 \sim N(\mu_2,\sigma_2)$, where $n_1=145, n_2=32$, $\mu_1,\mu_2,\sigma_1,\sigma_2$ unknown. $X_1,X_2$ independent. 
 
 We can estimate the population mean of *price* in our data, as we did in section 3.1, using sample mean as estimator.
 
@@ -356,12 +356,12 @@ paste("estimated variance of price in small cars is ", var_1)
 paste("estimated variance of price in big cars is", var_2)
 ```
 
-so far we give the distribution of our estimator and compute their CVs: $\hat\mu_1 \sim N(10.84,0.24),\hat\mu_2 \sim N(10.98,0.01)$, $cv(\hat\mu_1)=0.0037,cv(\hat\mu_2)=0.0016$.
+So far we give the distribution of our estimator and compute their CVs: $\hat\mu_1 \sim N(10.84,0.24),\hat\mu_2 \sim N(10.98,0.01)$, $cv(\hat\mu_1)=0.0037,cv(\hat\mu_2)=0.0016$.
 
 ## 4.2 Estimate the proportion of Section 3.4 for each population considered in 4.1. Estimate MSE of your estimators.
 
 Similarly, we also consider a binomial test and then apply CLT to get the estimated proportion.
-The estimated proportions in big-car subgroups are: all-wheel 0.22, front-wheel 0.75, rear wheel 0.03.In small-car subgroup: all-wheel 0.393,front-wheel 0.303,rear-wheel 0.303.
+The estimated proportions in big-car subgroups are: all-wheel 0.22, front-wheel 0.75, rear wheel 0.03. In small-car subgroup: all-wheel 0.393,front-wheel 0.303,rear-wheel 0.303.
 
 Considering sample mean is an unbiased estimator for population mean, $MSE(\hat p)= B^2(\hat p)+V(\hat p)=0+V(\hat p)=V(\hat p)$. As shown in section 3.4 $V(\hat p)=\frac{\hat p(1-\hat p)}{n}$, where n is the sample size. so we have $cv_{bigcar}(\hat p _{1,2,3} )=(0.0053,0.0059,0.0009),cv_{smallcxar}(\hat p_{1,2,3})=(0.0010,0.0006,0.0006)$
 
@@ -397,7 +397,7 @@ t=qt(alpha/2,df=v,lower.tail = FALSE)
 (sm1-sm2)+c(-1,1)*t*sqrt((sv1/n1)+(sv2/n2))
 ```
 
-Therefore we can say that the mean price for cars with less than five seats is very similar to the ones with more than 7 seats.
+Therefore we can say that the mean price for cars with less than five seats is nor very far away from the ones with more than 7 seats.
 
 ## 4.4 Compare the means of the continuous variable for the two subgroups by means of hypothesis testing of equality of means.
 
@@ -442,6 +442,8 @@ table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1+qnorm(0.025)*s
 print("the uuper bounds of the 95% CIs are:")
 table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1-qnorm(0.025)*s
 ```
+
+As we can see those intervals are very wide. Probably within a larger sample the CI will be narrower.
 
 ## 4.6 Compare the proportion of Section 4.4 for the two subgrups by means of hypothesis testing of equality of proportions.
 
@@ -550,9 +552,11 @@ Once assumed how was distributed our sample, we got that the sample mean was for
 
 Also, from the estimated proportion we got with a 95% confidence level that between 19% and 31% of the cars are rear wheel driven. This really surprises us because again compared with traditional cars, it is very rare to find rear wheel cars as they are more difficult to control. Only few several sports brands like BMW and Mercedes-Benz used them in most of their cars.
 
-On what we could call the second part of the project we started doing analysis for a different characteristic (but also a very important one) about the cars, which is the number of seats. We got that the mean prices were not significance different between them, and that also surprised us, as most of the times, big cars (7 seats) are always more likely to be more expensive.
+On what we could call the second part of the project we started doing analysis for a different characteristic (but also a very important one) about the cars, which is the number of seats. We got that the mean prices were not that different between them, and that also surprised us, as most of the times, big cars (7 seats) are always likely to be more expensive.  Despite this, we also came to the conclusion that the difference of means for prices had at least a 5% difference. Within this section we also saw that there was quite a difference in the proportions of small cars and big cars in terms of their wheel type mode.
 
 Along all the project we have gotten a lot of different solutions, we have try to solve each point with several different methods and we have ended up showing the ones that we thought will be the better ones for each point and purpose.
+
+\newpage
 
 ## Mention limitations and possible extensions of this project
 
