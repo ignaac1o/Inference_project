@@ -465,14 +465,14 @@ In section 3, we interpreted the properties of two estimators *sample mean*,*sam
 
 However, as shown in section 3, is always very hard to get the exact distribution of *sample median value* ,especially without normal distribution. For this reason, we only gave the expectation and variance of the *sample median value* from some references. 
 
-To do inference for estimator or the parameters with a more complex distribution, we can now introduce *bootstrap*. The *bootstrap* method mainly using the idea of *resampling*. Here is a brief introduction of this method.
+To do inference for an estimator with a complex distribution, we can try to use *bootstrap*. The *bootstrap* method mainly using the idea of *resampling*. Here is a brief introduction of this method.
 
-Assuming we have a $s.r.s. \space (x_1,x_2,\dots,x_1000)$ from a unknown distribution $X\sim F(.)$, similarly, we want to estimate the population mean of X by sample mean.
-we first randomly choose 500 items form the whole sample, and compute the mean value and record it as *m_1*, then we repeat this step for 1000 times. Here we are having a set of sample means$(m_1,m_2,\dots,m_{500})$, and with this new set, we can give the expectation and variance of our estimator,
+Assuming we have a $s.r.s. \space (x_1,x_2,\dots,x_{1000})$ from a unknown distribution $X\sim F(.)$, similarly, we want to estimate the population mean of X by sample mean.
+we first randomly choose 500 items form the whole sample, and compute the mean value and record it as $m_1$, then we repeat this step for 1000 times. Here we are having a set of sample means$(m_1,m_2,\dots,m_{1000})$, and with this new set, we can give the expectation and variance of our estimator,
 $$exp(samplemean)= \overline m, var(sample mean)=var(m)$$
-further more, we can reorganize the set $(m_1,m_2,\dots,m_{500})$ from the least to the most, and so we can determine the upper-bound and the lower-bound with 95% quantiles (actually 2.5% and 97.5%) of the 95% confidence interval. that is:
+further more, we can sort the set $(m_1,m_2,\dots,m_{1000})$ from the least to the most, and so we can determine the upper-bound and the lower-bound with 95% quantiles (actually 2.5% and 97.5%) of the 95% confidence interval. that is:
 
-$$CI(sample mean)=(m_{(0.025*500)},m_{(0.975*500)})$$
+$$CI(sample mean)=(m_{(0.025*1000)},m_{(0.975*1000)})$$
 Meanwhile, if we want to estimate the sample median value, all we need to do is to compute the median value of each sub-sample.
 
 In R, we can use the package $boostrap$, or as we are not doing a complex computation ,we can do it manually. 
