@@ -1,7 +1,7 @@
 ---
 title: "Inference_project"
 author: Ignacio Almodóar & Limingrui Wan
-output: html_document
+output: pdf_document
 ---
 
 
@@ -13,25 +13,27 @@ output: html_document
 
 The aim of this project is to garner knowledge in the vehicles market, specifically about electric vehicles, which is a segment that is growing year by year.
 
-The electric vehicle market has grown a lot in the last years and each year different brands are releasing new models with different specs and capacities. The automobile industry has been around us for almost 130 years, which means that almost everybody has at least a little bit of knowledge about the market in terms of traditional cars (combustion engines), if not probably people around you (relatives or friends) might know enough to give you recommendations that suits your needs.
+The electric vehicle market has grown a lot in the last years. Each year different brands are releasing new models with different specs and capacities. The automobile industry has been around us for almost 130 years, which means that almost everybody has at least a little bit of knowledge about the market in terms of traditional cars (combustion engines), if not, probably people around you (relatives or friends) might know enough to give you recommendations that suits your needs.
 
 However, what about electric cars? Most people struggle even telling prices for models that have already been in the market for more than five years, like Model S from Tesla or BMW i3, which are probably the ones that most people have seen several times on the streets, specially if you live in the city center.
 
-As electric cars has always have that label of "expensive cars" or "useless noways", people still do not have the necessity to start considering them as feasible options to buy when looking for a new car. Which ends up with an uninformed society when it comes to this "new age" of cars.
+As electric cars have always had that label of "expensive cars" or "useless noways", people still do not have the necessity to start considering them as feasible options to buy when looking for a new car, which ends up with an uninformed society when it comes to this "new age" of cars.
 
-Nevertheless this mentality has been changing, specially in the last years. It is not difficult to see several electric cars in one day, which means that people are starting to care about electric cars and to learn about them. However, it is sometimes difficult to compare between electric cars and traditional ones, because it is not part of what people is used to, and the prices might vary a lot for different models that might look the same just looking at the specs. Also, as new brands have come, many people do not know if their products are worth the price or not.
+Nevertheless, this mentality has been changing, specially in the last few years. It is not difficult to see several electric cars in one day, which means that people are starting to care about electric cars and to learn about them. However, it is sometimes difficult to compare between electric cars and traditional ones, because it is not part of what people are used to, and the prices might vary a lot for different models that might look the same by just looking at the specs. Also, as new brands have come, many people do not know if their products are worth the price or not.
 
-With this said, we have considered that this study could be useful for both companies and consumers. On one hand, companies that want to start developing electric cars might find helpful this study in order to consider several aspects while designing an electric car in terms of prices and characteristics. On the other hand for those consumers who want to take a peek in the electric cars market, allowing them to compare different prices in terms of power, efficiency or even number of seats and to see where those prices are going while the markets grows.
+That being said, we have considered that this study could be useful for both companies and consumers. On one hand, companies that want to start developing electric cars might find helpful this study in order to consider several aspects while designing an electric car in terms of prices and characteristics. On the other hand, for those consumers who want to take a peek into the electric cars market, allowing them to compare different prices in terms of power, efficiency or even number of seats and to see where those prices are going while the markets grows.
 
-If you want to take the research on electric vehicles to the next level, the information that is given in this study might be very useful in order to compare between the traditional car market and the electric one. Also, you could make predictions about prices for the next years and which aspects are significant evolving.
+If you want to take the research on electric vehicles to the next level, the information that is given in this study might be very useful in order to compare between the traditional car market and the electric one. Also, you could even make predictions about prices for the next years and which aspects are significantly evolving.
 
 ## 1.2 Description of the data set
 
-This data set has been taken from [kaggle](https://www.kaggle.com), which is a crowd-sourced platform to attract data scientists from all around the world to solve data science, machine learning and predictive analytics problems. It has more than one million of members, whereas more than half of the community are active members.
+This data set has been taken from [kaggle](https://www.kaggle.com), which is a sourced platform for data scientists from all around the world that want to solve data science, machine learning and predictive analytics problems. It has more than one million of members, whereas more than half of the community are active members.
 
-Kaggle enables data scientists and other developers to engage in running machine learning contests, write and share code, and to host data sets.
+Kaggle enables data scientists and other developers to take part in running machine learning contests, write and share scripts, and to host different data sets.
 
 Even though we have taken the set from Kaggle, all the data that contains this data set is scrapped from an online electric cars gauge web [Electric Vehicle Database](https://ev-database.org/#sort:path~type~order=.rank~number~desc|range-slider-range:prev~next=0~1200|range-slider-acceleration:prev~next=2~23|range-slider-topspeed:prev~next=110~450|range-slider-battery:prev~next=10~200|range-slider-eff:prev~next=100~300|range-slider-fastcharge:prev~next=0~1500|paging:currentPage=0|paging:number=9), where you have different sections for finding and compare different electric vehicles.
+
+The information contained in the data set was uploaded 2 months ago. The only information from our data set that could change over time are the prices. As the data has been updated recently, we can still consider that those are the current market prices for each car.
 
 This data set originally contains 177 different car models with 11 different aspects for each of them. These aspects are considered the most relevant ones while searching for information of different electric cars. These are also the ones that are directly related to the price and the ones that can be easily compared to one or another.   
 
@@ -45,11 +47,11 @@ While searching through the web from where this data set has been scrapped, you 
 - Quickest 0-100
 - Longest range
 
-In our case we have taken the ones listed for the cheapest electric car vehicles section, which necessary do not have only cheap cars, however it might show the most affordable ones from the ones with similar characteristics.
+In our case we have taken the ones listed for the cheapest electric car vehicles section, which necessary do not have only cheap cars, however it might show the most affordable ones from the ones with similar characteristics. Also it shows the most basic configuration for each model, so it basically shows the price from which you can get the most basic model.
 
 Notice that this data set is continuously updating, which means that you might get different results depending on when you do your research.
 
-In short, we can consider that our population is the whole electric brand new market, whereas our sample is a summary of those who are considered the cheapest one for their characteristics.
+In short, we can consider that our population is the whole electric brand new market, whereas our sample is a summary of those who are considered the cheapest ones.
 
 ## 1.4 Description of the variables
 
@@ -119,7 +121,7 @@ hist(pricelog,prob=TRUE)
 
 Applying logarithm we get a much symmetric distribution, that can be considered as a normal distribution.
 
-Given this results we can consider that our variable "PriceforGermany" follows a gamma distribution, whereas applying logarithm transformation to it makes it look more to a normal distribution.
+Given this results we can consider that our variable "PriceforGermany" follows a gamma distribution, whereas applying logarithm transformation to it makes it look more like a normal distribution.
 
 ## 2.2 Estimation of model parameters.
 
@@ -194,7 +196,7 @@ l <- dnorm(rlog, hatmu, sqrt(hatsigma))
 lines(rlog, l, col = "red", lwd = 2)
 ```
 
-Within this last plot we can see that the estimated distribution for our variable "PriceforGermany" transformed with logarithm is very close to the distribution of the variable so we can consider that it follows a normal distribution. 
+Within this last plot we can see that the estimated distribution for our variable "PriceforGermany" transformed with logarithm is very close to the distribution of the variable so we can consider that it follows a normal distribution $N(10.86,0.2)$. 
 
 # 3. One-sample Inference
 
@@ -202,33 +204,35 @@ Within this last plot we can see that the estimated distribution for our variabl
 
 ### unbiasedness
 
-In this section we can use sample mean and sample median value to estimate our population mean.
+In this section we are going to use sample mean and sample median value as estimators of our population mean.
+
 ```{r echo=FALSE}
 samplemean=mean(pricelog)
 sampleva=var(pricelog)
 paste("the sample mean is ",samplemean)
 paste("the sample median is ", median(pricelog))
 ```
-we can quickly give the distribution of the sample mean with CLT:
+We can quickly give the distribution of the sample mean considering CLT as our sample is long enough:
 $$\hat\theta \sim N(\mu,\sigma^2/n)$$
 
-obviously the sample mean is an unbiased estimator, since $exp(\hat\theta)=\mu$. Meanwhile, as we assume that it's a normal distribution, it's symmetric, thus sample median value is also unbiased $exp(med)=\mu$ and the variance of sample mean is$\hat \sigma^2/n=0.001$
+Obviously the sample mean is an unbiased estimator, since $exp(\hat\theta)=\mu$. Meanwhile, as we assume that it's a normal distribution, it's symmetric, thus sample median value is also unbiased $exp(med)=\mu$ and the variance of sample mean is $\hat \sigma^2/n$
 
-However, it's not easy to obtain the real distribution of sample median value(to get the expectation and variance), firstly we get the pdf of the sample median value via the formula for order statistics, which is
+However, it's not easy to obtain the real distribution of sample median value (to get the expectation and variance), firstly we get the pdf of the sample median value via the formula for order statistics, which is
 
 $$\rho_k(x) = \frac{n!}{(k-1)!(n-k)!}(F(x))^{k-1}(1-F(x))^{n-k}\rho(x) $$
-where n is the total number, k is the sequence number(2/n when we are ), $\rho(x)$ is the pdf of the original distribution(normal distribution), $F(x)$ is the cdf of the original distribution. So we shall calculate such indefinite integral:
+Where n is the total number, k is the sequence number (2/n when we are ), $\rho(x)$ is the pdf of the original distribution(normal distribution), $F(x)$ is the cdf of the original distribution. So we shall calculate such indefinite integral:
 $$\int x\rho_k(x) \space dx$$
 
-so far we can see the computation is too complex, but the variance is given in the slides or others reference
+So far we can see the computation is too complex. However, the variance is given in the slides and others reference as:
 $$V(med) \approx \frac{\pi \sigma^2}{2n}=0.016$$
 
-In order to check if the estimator is efficient, we just have to check their fisher information$I_n(\theta)=\frac {n}{\sigma^2}=v(\overline x)<v(med)$, so only sample mean is efficient.
+In order to check if the estimator is efficient, we just have to check their fisher information $I_n(\theta)=\frac {n}{\sigma^2}=v(\overline x)<v(med)$, so only sample mean is efficient.
 
 Obviously, sample mean has smaller variance and more efficient, but median value is more robust, can afford more missing of sample or more outliers.
 
 ## 3.2 Estimation of the errors of the two estimators
-Since sample mean and sample median value are both unbiased estimators, so we can calculate the error by CV, which is 
+
+Since sample mean and sample median value are both unbiased estimators, we can calculate the error by CV, which is: 
 $$cv=\frac{sd(\hat \theta)}{exp(\hat \theta)} $$
 
 ```{r}
@@ -246,7 +250,7 @@ In order to obtain the upper bound and the lower bound, we need to find such $c_
 $$P(c_1<\mu<c_2)=1-\alpha$$
 We are having a normal assumption of the distribution, so we use *exact confidence intervals under normality*, and of course we can use T-statistic. Describe our problem in a mathematical way:
 
-We have $(x_1,x_2,\dots,x_n)$s.r.s. form a r.v.$N(\mu,\sigma^2)$, where $\mu, \sigma$unknown, and $n=177$, it holds
+We have $(x_1,x_2,\dots,x_n)$ s.r.s. form a r.v. $N(\mu,\sigma^2)$, where $\mu, \sigma$unknown, and $n=177$, it holds
 $$T=\frac{\overline x-\mu}{S_n'/\sqrt{n}}\sim t_{n-1}$$
 
 then we just have to find such $t_1,t_2$ s.t.
@@ -266,15 +270,20 @@ print("95% CI of population mean is:")
 CI
 ```
 
+Within this result we can conclude that with a 95% of confidence the population mean for prices in electric cars is between 9.96 and 11.76 in a logarithm scale.
 
 ## 3.4 Estimation of the proportion of units in the population that belongs to the category selected
-We divide the sample into three groups according to the variable "drive", which implies how the specific car is driven. We consider a Binomial distribution$Bern(p)$, the estimator actually estimate the mean value of the probability in a Binomial test, so the distribution of estimated proportion is$N(p,\frac{1(1-p)}{n})$
+
+We divided the sample into three groups according to the variable "drive", which implies how the specific car is driven. Considering a Binomial distribution $Bern(p)$, the estimator actually estimate the mean value of the probability in a Binomial test, so the distribution of estimated proportion is $N(p,\frac{1(1-p)}{n})$
+
 ```{r echo=FALSE}
 data$Drive=as.factor(data$Drive)
 table(data$Drive)
 plot(data$Drive)
 ```
-the estimated proportion is:
+
+The estimated proportion is:
+
 ```{r echo=FALSE}
 p1=64/177
 p2=68/177
@@ -285,7 +294,9 @@ paste("the estimated proportion of Rear Wheel Drive  car is ",p3 )
 ```
 
 ## 3.5 Variance of our estimator of proportion
-since we have obtained the distribution of $\overline x$,we can easily get the variance of the estimator:
+
+Since we have obtained the distribution of $\overline x$,we can easily get the variance of the estimator, by CLT, we know that for our variance for a bin(n,p) is $\frac{p(1-p)}{n}$
+
 ```{r echo=FALSE}
 n=177
 v1=p1*(1-p1)/n
@@ -316,6 +327,8 @@ c(p1+qnorm(0.025)*sqrt(v1),p1-qnorm(0.025)*sqrt(v1))
 c(p2+qnorm(0.025)*sqrt(v2),p2-qnorm(0.025)*sqrt(v2))
 c(p3+qnorm(0.025)*sqrt(v3),p3-qnorm(0.025)*sqrt(v3))
 ```
+
+Therefore we can say with a 95% of confidence that between those intervals we have how the electric car market is distributed in terms of their type of drive.
 
 \newpage
 
@@ -354,7 +367,9 @@ samplemean_b=mean(data_bigcar$PriceinGermany)
 paste("mean price of the small cars is", samplemean_s)
 paste("mean price of the big cars is", samplemean_b)
 ```
-in order to get the coefficient of variation, we need to know the variance of the estimator, we can use $S'^2$ to estimate the population variance.
+
+In order to get the coefficient of variation, we need to know the variance of the estimator, we can use $S'^2$ to estimate the population variance.
+
 ```{r echo=FALSE}
 var_1=0
 for (i in 1:n1){
@@ -370,7 +385,9 @@ var_2=var_2/(n1-1)
 paste("estimated variance of price in small cars is ", var_1)
 paste("estimated variance of price in big cars is", var_2)
 ```
-so far we give the distribution of our estimator and compute their CVs:
+
+So far we give the distribution of our estimator and compute their CVs:
+
 $$\hat\mu_1 \sim N(\overline x_1,v(x_1)/n_1),\hat\mu_2 \sim N(\overline x_2,v(x_2)/n_2)$$
 ```{r echo=FALSE}
 paste("cv of the small cars' prices is", ((var_1/n1)^0.5)/samplemean_s)
@@ -378,7 +395,9 @@ paste("cv of the big cars' prices is", ((var_2/n2)^0.5)/samplemean_b)
 ```
 
 ## 4.2 Estimate the proportion of Section 3.4 for each population considered in 4.1. Estimate MSE of your estimators.
+
 Similarly, we also consider a binomial distribution and then apply CLT to get the estimated proportion.
+
 ```{r echo=FALSE}
 print("the estimated porportions for different driven ways in big-car are: ")
 table(data_bigcar$Drive)/n2
@@ -386,7 +405,7 @@ print("the estimated porportions for different driven ways in small-car are: ")
 table(data_smallcar$Drive)/n1
 ```
 
-Considering sample mean is an unbiased estimator for population mean, $MSE(\hat p)= B^2(\hat p)+V(\hat p)=0+V(\hat p)=V(\hat p)$. As shown in section 3.4 $V(\hat p)=\frac{\hat p(1-\hat p)}{n}$, where n is the sample size.
+Considering sample mean is an unbiased estimator for population mean, $MSE(\hat p)= B^2(\hat p)+V(\hat p)=0+V(\hat p)=V(\hat p)$. As shown in section 3.4, $V(\hat p)=\frac{\hat p(1-\hat p)}{n}$, where n is the sample size.
 ```{r}
 print("MSEs in big-car group are:")
 table(data_bigcar$Drive)/n2*(1-table(data_bigcar$Drive)/n2)/n2
@@ -401,7 +420,8 @@ We have now two random samples, one with all the cars that have 5 or less seats 
 In order to solve the problem we have to find a pivotal quantity where all the values in it are known. For this reason we are going to use de T statistics where mean and variances are estimated as sample means and sample cuasivariances.
 
 $$T=\frac{\overline X_{1}-\overline{X}_2- (\mu_{1}-\mu_{2})}{\sqrt{\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2}}} \sim t_v $$
-This expression can be considered as a normal due to the Welch-Sattertwaite method, which is used to calculate an approximation to the effective degrees of freedom of a linear combination of independent sample variances. Using this method, we get thw following expression for the degrees of freedom:
+This expression can be considered as a normal due to the Welch-Sattertwaite method  [[1](https://ncss-wpengine.netdna-ssl.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Intervals_for_the_Difference_Between_Two_Means.pdf),
+ [2](https://en.wikipedia.org/wiki/Welch–Satterthwaite_equation)], which is used to calculate an approximation to the effective degrees of freedom of a linear combination of independent sample variances. Using this method, we get the following expression for the degrees of freedom: 
 
 $$v=\frac{(\frac{S´_1^2}{n_1}+\frac{S´_2^2}{n_2})^2}{\frac{S´_1^4}{n_1^2(n_1-1)}+\frac{S´_2^4}{n_2^2(n_2-1)}}$$
 Now that we have our pivotal quantity we have to find our confidence intervals such that $P(c_1\leq T \leq c_2) = 1- \alpha$. Within a few changes our expression to calculate confidence intervals ends up being:
@@ -424,10 +444,8 @@ t=qt(alpha/2,df=v,lower.tail = FALSE)
 ```{r}
 (sm1-sm2)+c(-1,1)*t*sqrt((sv1/n1)+(sv2/n2))
 ```
- So our $CI_{0.95}(\mu_1-\mu_2)=(-0.25,-0.0319)$
- 
- [ref:theorema1](https://ncss-wpengine.netdna-ssl.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Intervals_for_the_Difference_Between_Two_Means.pdf)
- [ref:theorema2](https://en.wikipedia.org/wiki/Welch–Satterthwaite_equation)
+
+Therefore we can say that the mean price for cars with less than five seats is very similar to the ones with more than 7 seats.
 
 ## 4.4 Compare the means of the continuous variable for the two subgroups by means of hypothesis testing of equality of means.
 
@@ -451,14 +469,17 @@ t_score=(sm1-sm2)/(sqrt((sv1/n1)+(sv2/n2)))
 Solving both equations we get the following results, $T=-2.53$ and $t_{v,\alpha/2}=1.96$. Therefore we can see that our T value is is in the critical region. Within this result we need to reject the null hypothesis. Then we can conclude that there is a major significance difference at a 5% significance level that there is a difference between the mean of the prices for cars with less than 5 seats and more than 7.
 
 ## 4.5 Compare the proportion of Section 4.4 for the subgroups by means of a confidence interval for the difference of proportions.
-first consider a general case, a s.r.s$(x_{11},x_{12},\dots,x_{1n_1})$ from $X_1\sim N(\mu_1,\sigma _1^2)$, another s.r.s$(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2\sim N(\mu_2,\sigma _2^2)$, then we have $\theta =x_1+x_2 \sim(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$
+First consider a general case, a s.r.s $(x_{11},x_{12},\dots,x_{1n_1})$ from $X_1\sim N(\mu_1,\sigma _1^2)$, another s.r.s$(x_{21},x_{22},\dots,x_{2n_2})$ from $X_2\sim N(\mu_2,\sigma _2^2)$, then we have $\theta =x_1+x_2 \sim(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$
 
-In our case, from above sections we know that the proportions are independently following different normal distributions. We firstly assume a variable $\theta =p_1-p_2$, where $p_1$ represents the proportions from group *big-car*, $p_2$ represents the proportions from group *small-car*. Obviously $\hat\theta \sim N(\hat p_1-\hat p_2, \frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2})$
+In our case, from above sections we know that the proportions are independently following different normal distributions. We firstly assume a variable $\theta =p_1-p_2$, where $p_1$ represents the proportions from group *big-car*, $p_2$ represents the proportions from group *small-car*. 
 
-then as what we have done in section 3.6, find $c_1,c_2$ s.t. $P(c_1<\theta<c_2)=1-\alpha$
+$$\hat\theta \sim N(\hat p_1-\hat p_2, \frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2})$$
+
+Then as what we have done in section 3.6, find $c_1,c_2$ s.t. $P(c_1<\theta<c_2)=1-\alpha$
 similarly, we have 
 $$\frac{\hat\theta-\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
-so apply all the conclusions we have proved above, we can see that the 95% CIs are (we actually have three proportions, so we can do it for three times):
+Applying all the conclusions we have proved above, we can see that the 95% CIs are (we actually have three proportions, so we can do it for three times):
+
 $$CI(\hat p_1-\hat p_2)=((\hat p_1-\hat p_2)+Z_{\alpha/2}\sqrt{\frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2}},(\hat p_1-\hat p_2)-Z_{\alpha/2}\sqrt{\frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2}}$$
 
 ```{r echo=FALSE}
@@ -471,22 +492,24 @@ table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1-qnorm(0.025)*s
 ```
 
 ## 4.6 Compare the proportion of Section 4.4 for the two subgrups by means of hypothesis testing of equality of proportions.
-we can adapt the definitions of general case in section 4.5 and determine the hypothesis we are using. We also assume $\theta=p_1-p_2$, if $p_1=p_2$, obviously $\theta=0$, so our null hypothesis is $H_0: \theta=0$, and the alternative hypothesis is:$H_1: \theta \ne 0$. 
+
+We can adapt the definitions of general case in section 4.5 and determine the hypothesis we are using. We also assume $\theta=p_1-p_2$, if $p_1=p_2$, obviously $\theta=0$, so our null hypothesis is $H_0: \theta=0$, and the alternative hypothesis is:$H_1: \theta \ne 0$. 
 $$\hat\theta \sim N(\hat p_1-\hat p_2, \frac{\hat p_1(1-\hat p_1)}{n_1}+\frac{\hat p_2(1-\hat p_2)}{n_2})$$
 $$Z=\frac{\hat\theta-\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
 since we are checking if $\theta=0$,
 $$Z=\frac{\hat\theta}{\hat\sigma(\theta) }\sim N(0,1)$$
-And we will reject the null hypothesis if $Z_{obs}<Z_{0.025} orZ{obs}>Z_{0.975}$(means the proportions in two groups are same), otherwise we will accept the null hypothesis(means they are not same). ($\alpha=0.05$ and $Z_{0.025}=-1.96,Z_{0.975}=1.96$)
+We will reject the null hypothesis if $Z_{obs}<Z_{0.025} orZ{obs}>Z_{0.975}$ (means the proportions in two groups are same), otherwise we will accept the null hypothesis(means they are not same). ($\alpha=0.05$ and $Z_{0.025}=-1.96,Z_{0.975}=1.96$)
 
 ```{r echo=FALSE}
 (table(data_bigcar$Drive)/n2-table(data_smallcar$Drive)/n1)/s
 ```
+
 We can see that we should reject that the proportions are same, for all three types.
 
 
 # Additional analyze: using bootstrap to interpret the estimator
 
-In section 3, we interpret the properties of two estimators *sample mean*,*sample median value* of the population mean. Considering our sample size is large enough, we can use *CLT* to obtain the approximated distribution of *sample mean*, thus is not very hard to obtain it's properties including *unbiasedness*,*efficiency* even more.
+In section 3, we interpreted the properties of two estimators *sample mean*,*sample median value* of the population mean. Considering our sample size is large enough, we can use *CLT* to obtain the approximated distribution of *sample mean*, thus is not very hard to obtain it's properties including *unbiasedness*,*efficiency* even more.
 
 However, as shown in section 3, is always very hard to get the exact distribution of *sample median value* ,especially without normal distribution. For this reason, we only gave the expectation and variance of the *sample median value* from some references. 
 
@@ -520,7 +543,7 @@ mean_var=var(vector_mean)
 median_var=var(vector_median)
 ```
 
-we can visualize these two vectors:
+We can visualize these two vectors:
 
 ```{r echo=FALSE}
 mfrow=c(1,2)
@@ -528,7 +551,7 @@ hist(vector_mean)
 hist(vector_median)
 ```
 
-this way we obtained two estimator of population mean by $bootstrap$ methods. And we can give their expectations and variances
+This way we obtained two estimator of population mean by $bootstrap$ methods. And we can give their expectations and variances
 ```{r echo=FALSE}
 paste("the expectation of sample mean is:", mean_exp)
 paste("the expectation of sample median is:", median_exp)
@@ -550,7 +573,7 @@ lower_med=median_ordered[25]
 ## confidence interval bounds of sample median
 ```
 
-thus we have the estimators' 95% confidence intervals:
+Thus we have the estimators' 95% confidence intervals:
   ```{r echo=FALSE}
 print("the 95% CI of sample mean is: ")
 c(lower_mean,upper_mean)
@@ -559,11 +582,33 @@ print("the 95% CI of sample median is:")
 c(lower_med,upper_med)
 ```
 
-we can see that there is an obvious difference between the expectations, and the variance of sample means is larger, that is to say, more scattered.
+We can see that there is an obvious difference between the expectations, and the variance of sample means is larger, that is to say, more scattered.
 
 # Conclusions
 
 ## Summarize and comment on the most important conclusions of your analyses
 
+At this point of the project that we can summarize all the work that we have done, we can say that the results obtained are unique. We cannot assume that they are perfect. We can assume that they are good approaches to the reality, but not accept them with a 100% confidence interval. And this is what statistical inference is about.
+
+Within different approaches we would have probably gotten different results, and that is totally fine. First of all we assumed that our continuous variable "PriceforGermany" followed a normal distribution, despite of when we plotted the original value it looked more like a Gamma distribution. We decided to go with a normal distribution at the end because for our different estimation methods, we obtained better results for the normal distribution. We know that the methods that we learn are not the best ones, but they do their job fine, they are easy to understand and they do not require complex software to solve them, we could have done each calculation by hand and obtain the same results.
+
+Once assumed how was distributed our sample, we got that the sample mean was for the prices in Germany 52.243€ which is quite expensive considering the actual prices for fuel cars. Also, within our analysis we can say with a 95% of confidence that the mean price is in between 21.215€ and 128.643€, which is a very good estimation for the electric car market. 
+
+Also, from the estimated proportion we got with a 95% confidence level that between 19% and 31% of the cars are rear wheel driven. This really surprises us because again compared with traditional cars, it is very rare to find rear wheel cars as they are more difficult to control. Only few several sports brands like BMW and Mercedes-Benz used them in most of their cars.
+
+On what we could call the second part of the project we started doing analysis for a different characteristic (but also a very important one) about the cars, which is the number of seats. We got that the mean prices were not significance different between them, and that also surprised us, as most of the times, big cars (7 seats) are always more likely to be more expensive.
+
+Along all the project we have gotten a lot of different solutions, we have try to solve each point with several different methods and we have ended up showing the ones that we thought will be the better ones for each point and purpose.
+
 ## Mention limitations and possible extensions of this project
+
+We have found several limitations in the project and most of them were directly related to the difficulty of obtaining good results with more complex distributions than the normal. For example with the Gamma distribution, we could not come to good results without using numerical methods techniques like for example when we tried to estimate its parameters using Maximum Likelihood method. We had several difficulties while trying to compute the factorial in its pdf.
+
+Another limitation that we found which is more related to our data set is that our sample is not long enough. Even though it has 177 values, it is very difficult to assume that the results obtained were really good estimators about the whole electric car market. Also, due to this limitation when we wanted to divide the sample depending on the number of seats, as we had so few values for some number of seats we had to group them in just two different types.
+
+A very reasonable and logic extension of this project could be the fact about making inference not only in the electric vehicle car market but also in the traditional car market. This way we could obtain good conclusions about the real difference between this two markets. 
+
+Even though there is a lot of information about the automobile industry, it is not easy to find statistics about it. We had some difficulties on one of our main purposes within this project, which was being able to compare between this two markets in order to make assumptions on whether it was a good idea to start considering buying an electric car and find out if their prices were fair or if they were still overvalued.
+
+Despite this we are very proud of the results that we have come to and we really enjoyed working with this data set. Also we have gained a little bit of knowledge about the electric car market, which was our main purpose with this project. Moreover we think that the document is easy enough for everybody to understand it so anyone can also learn with this project.
 
